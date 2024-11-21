@@ -3,9 +3,43 @@
 {% block title %}New SuperHero{% endblock %}
 
 {% block body %}
-    <h1>Create new SuperHero</h1>
+    <div class="w-3/4 p-5 mx-auto bg-white h-3/4">
+        <div class="flex flex-col items-center">
+            <h1>Create new SuperHero</h1>
 
-    {{ include('super_hero/_form.html.twig') }}
+            {{ form_row(form.nom, {
+                'label': "Nom du super héros",
+                    'label_attr': {"class": "text-xl"},
+                'attr': {
+                    "class": "border border-black"
+                },
+            }) }}
+            {{ form_row(form.alterEgo, {
+                'label': "Alter Ego",
+                    'label_attr': {"class": "text-xl"},
+                'attr': {
+                    "class": "border border-black"
+                },
+            }) }}
+            {{ form_row(form.estDisponible, {
+                'label': "Disponible",
+                    'label_attr': {"class": "text-xl"},
+                'attr': {
+                    "class": "border border-black"
+                },
+            }) }}
+            {{ form_row(form.niveauEnergie, {
+                'label': "Niveau d'énergie",
+                    'label_attr': {"class": "text-xl"},
+                'attr': {
+                    "class": "border border-black"
+                },
+            }) }}
+            
+            
+            {{ include('super_hero/_form.html.twig') }}
+        </div>
 
-    <a href="{{ path('app_super_hero_index') }}">back to list</a>
+        <a href="{{ path('app_super_hero_index') }}">back to list</a>
+    </div>
 {% endblock %}
