@@ -11,10 +11,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/super/hero')]
+#[Route('/superhero', name: 'app_super_hero_')]
 final class SuperHeroController extends AbstractController
 {
-    #[Route(name: 'app_super_hero_index', methods: ['GET'])]
+    #[Route(name: 'index', methods: ['GET'])]
     public function index(SuperHeroRepository $superHeroRepository): Response
     {
         return $this->render('super_hero/index.html.twig', [
@@ -22,7 +22,7 @@ final class SuperHeroController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_super_hero_new', methods: ['GET', 'POST'])]
+    #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $superHero = new SuperHero();
@@ -42,7 +42,7 @@ final class SuperHeroController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_super_hero_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'show', methods: ['GET'])]
     public function show(SuperHero $superHero): Response
     {
         return $this->render('super_hero/show.html.twig', [
@@ -50,7 +50,7 @@ final class SuperHeroController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_super_hero_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, SuperHero $superHero, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(SuperHeroType::class, $superHero);
@@ -68,7 +68,7 @@ final class SuperHeroController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_super_hero_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, SuperHero $superHero, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$superHero->getId(), $request->getPayload()->getString('_token'))) {
