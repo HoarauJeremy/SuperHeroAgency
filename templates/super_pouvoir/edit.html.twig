@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit SuperPouvoir{% endblock %}
+
+{% block body %}
+    <h1>Edit SuperPouvoir</h1>
+
+    {{ include('super_pouvoir/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_super_pouvoir_index') }}">back to list</a>
+
+    {{ include('super_pouvoir/_delete_form.html.twig') }}
+{% endblock %}

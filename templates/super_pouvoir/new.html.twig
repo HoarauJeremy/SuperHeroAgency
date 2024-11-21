@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New SuperPouvoir{% endblock %}
+
+{% block body %}
+    <h1>Create new SuperPouvoir</h1>
+
+    {{ include('super_pouvoir/_form.html.twig') }}
+
+    <a href="{{ path('app_super_pouvoir_index') }}">back to list</a>
+{% endblock %}

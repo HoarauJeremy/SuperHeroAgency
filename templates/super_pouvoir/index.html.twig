@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SuperPouvoir index{% endblock %}
+
+{% block body %}
+    <h1>SuperPouvoir index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Description</th>
+                <th>Niveau</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for super_pouvoir in super_pouvoirs %}
+            <tr>
+                <td>{{ super_pouvoir.id }}</td>
+                <td>{{ super_pouvoir.nom }}</td>
+                <td>{{ super_pouvoir.description }}</td>
+                <td>{{ super_pouvoir.niveau }}</td>
+                <td>
+                    <a href="{{ path('app_super_pouvoir_show', {'id': super_pouvoir.id}) }}">show</a>
+                    <a href="{{ path('app_super_pouvoir_edit', {'id': super_pouvoir.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_super_pouvoir_new') }}">Create new</a>
+{% endblock %}
