@@ -2,10 +2,9 @@
 
 namespace App\Form;
 
-use App\Entity\SuperHero;
 use App\Entity\SuperPouvoir;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -17,11 +16,6 @@ class SuperPouvoirType extends AbstractType
             ->add('nom')
             ->add('description')
             ->add('niveau')
-            ->add('superHeroes', EntityType::class, [
-                'class' => SuperHero::class,
-                'choice_label' => 'id',
-                'multiple' => true,
-            ])
         ;
     }
 
