@@ -23,6 +23,18 @@
                 <th>Niveau</th>
                 <td>{{ super_pouvoir.niveau }}</td>
             </tr>
+            <tr>
+                <th>Héros</th>
+                <td>
+                    <ul>
+                        {% for heros in super_pouvoir.superHeroes %}
+                            <li>{{ heros.nom }}</li>
+                        {% else %}
+                            <li>Aucun héros n'est liée à ce pouvoir</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
         </tbody>
     </table>
 
