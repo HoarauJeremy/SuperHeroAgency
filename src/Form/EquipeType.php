@@ -17,22 +17,19 @@ class EquipeType extends AbstractType
         $builder
             ->add('nom')
             ->add('estActif')
-            ->add('createdAt', null, [
-                'widget' => 'single_text',
-            ])
             ->add('chef', EntityType::class, [
                 'class' => SuperHero::class,
-                'choice_label' => 'id',
+                'choice_label' => 'nom',
             ])
             ->add('menbers', EntityType::class, [
                 'class' => SuperHero::class,
-                'choice_label' => 'id',
+                'choice_label' => 'nom',
                 'multiple' => true,
             ])
-            ->add('missionEnCours', EntityType::class, [
-                'class' => Mission::class,
-                'choice_label' => 'id',
-            ])
+            // ->add('missionEnCours', EntityType::class, [
+            //     'class' => Mission::class,
+            //     'choice_label' => 'id',
+            // ])
         ;
     }
 
