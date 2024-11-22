@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/superhero', name: 'app_super_hero_')]
+#[Route('/superheros', name: 'app_super_heros_')]
 final class SuperHeroController extends AbstractController
 {
     #[Route(name: 'index', methods: ['GET'])]
@@ -30,10 +30,13 @@ final class SuperHeroController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($superHero);
+
+            $superHeroData = $form->getData();
+            $superHeroData->setCreatedAt(new \DateTimeImmutable());
+            $entityManager->persist($superHeroData);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_super_hero_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_super_heros_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('super_hero/new.html.twig', [
@@ -59,7 +62,7 @@ final class SuperHeroController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_super_hero_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_super_heros_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('super_hero/edit.html.twig', [
@@ -76,6 +79,6 @@ final class SuperHeroController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_super_hero_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_super_heros_index', [], Response::HTTP_SEE_OTHER);
     }
 }

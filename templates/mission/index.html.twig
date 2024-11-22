@@ -25,9 +25,9 @@
                 <td>{{ mission.id }}</td>
                 <td>{{ mission.titre }}</td>
                 <td>{{ mission.description }}</td>
-                <td>{{ mission.statut }}</td>
-                <td>{{ mission.debut ? mission.debut|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ mission.fin ? mission.fin|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ mission.statut.value|capitalize }}</td>
+                <td>{{ mission.debut ? mission.debut|date('d/m/Y H:i') : '' }}</td>
+                <td>{{ mission.fin ? mission.fin|date('d/m/Y H:i') : '' }}</td>
                 <td>{{ mission.localisation }}</td>
                 <td>{{ mission.niveauDanger }}</td>
                 <td>

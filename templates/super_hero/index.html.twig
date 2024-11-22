@@ -30,8 +30,8 @@
                         <td>{{ super_hero.biographie }}</td>
                         <td>{{ super_hero.nomImage }}</td>
                         <td>
-                            <a href="{{ path('app_super_hero_show', {'id': super_hero.id}) }}">Afficher</a>
-                            <a href="{{ path('app_super_hero_edit', {'id': super_hero.id}) }}">Modifier</a>
+                            <a href="{{ path('app_super_heros_show', {'id': super_hero.id}) }}">Afficher</a>
+                            <a href="{{ path('app_super_heros_edit', {'id': super_hero.id}) }}">Modifier</a>
                         </td>
                     </tr>
                 {% else %}
@@ -42,6 +42,6 @@
                 </tbody>
             </table>
         </div>
-        <a class="p-2 border border-black rounded" href="{{ path('app_super_hero_new') }}">Ajouter un héros</a>
+        <a class="p-2 border border-black rounded" href="{{ path('app_super_heros_new') }}">Ajouter un héros</a>
     </div>
 {% endblock %}

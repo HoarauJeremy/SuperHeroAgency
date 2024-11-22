@@ -20,12 +20,9 @@ class SuperHeroType extends AbstractType
             ->add('niveauEnergie')
             ->add('biographie')
             ->add('nomImage')
-            ->add('createdAt', null, [
-                'widget' => 'single_text',
-            ])
             ->add('Pouvoir', EntityType::class, [
                 'class' => SuperPouvoir::class,
-                'choice_label' => 'id',
+                'choice_label' => 'nom',
                 'multiple' => true,
             ])
         ;

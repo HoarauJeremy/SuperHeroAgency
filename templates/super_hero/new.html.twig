@@ -7,7 +7,7 @@
         <div class="flex flex-col items-center">
             <h1>Create new SuperHero</h1>
 
-            {{ form_row(form.nom, {
+            {# {{ form_row(form.nom, {
                 'label': "Nom du super héros",
                     'label_attr': {"class": "text-xl"},
                 'attr': {
@@ -34,12 +34,12 @@
                 'attr': {
                     "class": "border border-black"
                 },
-            }) }}
+            }) }} #}
             
             
             {{ include('super_hero/_form.html.twig') }}
         </div>
 
-        <a href="{{ path('app_super_hero_index') }}">back to list</a>
+        <a href="{{ path('app_super_heros_index') }}">back to list</a>
     </div>
 {% endblock %}
