@@ -39,6 +39,11 @@ class Mission
     #[ORM\Column]
     private ?int $niveauDanger = null;
 
+    public function __construct()
+    {
+        $this->statut = Statut::PENDING;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -68,12 +73,12 @@ class Mission
         return $this;
     }
 
-    public function getStatut(): Statut
+    public function getStatut(): ?Statut
     {
         return $this->statut;
     }
 
-    public function setStatut(Statut $statut): self
+    public function setStatut(?Statut $statut): self
     {
         $this->statut = $statut;
 
