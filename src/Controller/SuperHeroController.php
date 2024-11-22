@@ -7,9 +7,12 @@ use App\Form\SuperHeroType;
 use App\Repository\SuperHeroRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/superheros', name: 'app_super_heros_')]
 final class SuperHeroController extends AbstractController
@@ -23,7 +26,9 @@ final class SuperHeroController extends AbstractController
     }
 
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManage, SluggerInterface $slugger,
+        #[Autowire('%kernel.project_dir%/public/uploads/Images')] string $imageDirectory
+    ): Response
     {
         $superHero = new SuperHero();
         $form = $this->createForm(SuperHeroType::class, $superHero);
@@ -32,9 +37,25 @@ final class SuperHeroController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $superHeroData = $form->getData();
+
+            $superHeroImage = $form->get('nomImage')->getData();
+
+            if ($superHeroImage) {
+                $originalImageName = pathinfo($superHeroImage->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeImageName = $slugger->slug($originalImageName);
+                $newImageName = $safeImageName.'-'.uniqid().'.'.$superHeroImage->guessExtension();
+
+                try {
+                    $superHeroImage->move($imageDirectory, $newImageName);
+                } catch (FileException $e) {
+                    $e->getMessage();
+                }
+
+                $superHero->setNomImage($newImageName);
+            }
             $superHeroData->setCreatedAt(new \DateTimeImmutable());
-            $entityManager->persist($superHeroData);
-            $entityManager->flush();
+            $entityManage->persist($superHeroData);
+            $entityManage->flush();
 
             return $this->redirectToRoute('app_super_heros_index', [], Response::HTTP_SEE_OTHER);
         }

@@ -33,7 +33,13 @@
             </tr>
             <tr>
                 <th>NomImage</th>
-                <td>{{ super_hero.nomImage }}</td>
+                <td>
+                    {% if super_hero.nomImage is not null  %}
+                        <img src="{{ asset('uploads/Images/' ~ super_hero.nomImage) }}" alt="{{ super_hero.nomImage }}">
+                    {% else %}
+                        Aucune image disponible
+                    {% endif %}
+                </td>
             </tr>
             <tr>
                 <th>CreatedAt</th>
