@@ -25,6 +25,14 @@ final class SuperHeroController extends AbstractController
         ]);
     }
 
+    #[Route('/available', name: 'available')]
+    public function available(SuperHeroRepository $superHeroRepository) : Response 
+    {
+        return $this->render('super_hero/index.html.twig', [
+            'super_heroes' => $superHeroRepository->findBy(['estDisponible' => '1']),
+        ]);
+    }
+
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManage, SluggerInterface $slugger,
         #[Autowire('%kernel.project_dir%/public/uploads/Images')] string $imageDirectory
