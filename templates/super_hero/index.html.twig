@@ -8,8 +8,16 @@
             <h1 class="mb-2 text-4xl font-bold">Super Héros</h1>
 
             <a class="p-2 border border-black rounded" href="{{ path('app_super_heros_new') }}">Ajouter un héros</a>
-                
-                <table class="border w-3/4">
+
+            <div class="">
+                {{ include('super_hero/_form.html.twig') }}
+            </div>
+
+                <pre>
+                    {{ dump(super_heroes) }}
+                </pre>
+
+                <table class="w-3/4 border">
                     <thead>
                         <tr>
                             <th>Id</th>
@@ -35,6 +43,47 @@
                             <td>
                                 <a href="{{ path('app_super_heros_show', {'id': super_hero.id}) }}">Afficher</a>
                                 <a href="{{ path('app_super_heros_edit', {'id': super_hero.id}) }}">Modifier</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="8">Aucun héros disponible</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <br><br>
+                <hr>
+                <br><br>
+
+
+                <table class="w-3/4 border">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Nom</th>
+                            <th>Alter Ego</th>
+                            <th>Disponible</th>
+                            <th>Niveau d'énergie</th>
+                            <th>Biographie</th>
+                            {# <th>Image</th> #}
+                            <th>actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for super_heross in super_heroes_filter %}
+                        <tr class="border">
+                            <td>{{ super_heross.id }}</td>
+                            <td>{{ super_heross.nom }}</td>
+                            <td>{{ super_heross.alterEgo }}</td>
+                            <td>{{ super_heross.estDisponible ? 'Oui' : 'Non' }}</td>
+                            <td>{{ super_heross.niveauEnergie }}</td>
+                            <td>{{ super_heross.biographie }}</td>
+                            {# <td>{{ super_heross.nomImage }}</td> #}
+                            <td>
+                                <a href="{{ path('app_super_heros_show', {'id': super_heross.id}) }}">Afficher</a>
+                                <a href="{{ path('app_super_heros_edit', {'id': super_heross.id}) }}">Modifier</a>
                             </td>
                         </tr>
                     {% else %}

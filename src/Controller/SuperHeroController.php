@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\SuperHero;
+use App\Form\FiltreType;
 use App\Form\SuperHeroType;
 use App\Repository\SuperHeroRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,11 +18,51 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 #[Route('/superheros', name: 'app_super_heros_')]
 final class SuperHeroController extends AbstractController
 {
-    #[Route(name: 'index', methods: ['GET'])]
+    #[Route(name: 'index', methods: ['GET', 'POST'])]
     public function index(SuperHeroRepository $superHeroRepository): Response
     {
+
+        $superHerosFiltrer = [];
+
         return $this->render('super_hero/index.html.twig', [
             'super_heroes' => $superHeroRepository->findAll(),
+            'super_heroes_filter' => $superHerosFiltrer,
+            'form' => $this->createForm(FiltreType::class, new SuperHero(), [
+                'action' => $this->generateUrl('app_super_heros_filter'),
+            ]),
+        ]);
+    }
+
+    #[Route('/filter', name:'filter')]
+    public function filter(Request $request, SuperHeroRepository $superHeroRepository) : Response
+    {
+        $heros = new SuperHero();
+        $form = $this->createForm(FiltreType::class,$heros, [
+            'action' => $this->generateUrl('app_super_heros_filter'),
+        ]);
+        $form->handleRequest($request);
+
+        $superHerosFiltrer = $superHeroRepository->findAll();
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $superHeros = $form->getData();
+
+            $tab = [
+                'nom' => $superHeros->getNom() ?: null,
+                'estDisponible' => $superHeros->isEstDisponible() ?: null,
+                'niveauEnergie' => $superHeros->getNiveauEnergie() ?: null,
+            ];
+
+            $superHerosFiltrer = $superHeroRepository->findHeroByFilter($tab);
+        }
+
+        // dd($superHerosFiltrer);
+
+        return $this->render('super_hero/index.html.twig', [
+            'super_heroes' => $superHeroRepository->findAll(),
+            'super_heroes_filter' => $superHerosFiltrer,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -29,7 +70,8 @@ final class SuperHeroController extends AbstractController
     public function available(SuperHeroRepository $superHeroRepository) : Response 
     {
         return $this->render('super_hero/index.html.twig', [
-            'super_heroes' => $superHeroRepository->findBy(['estDisponible' => '1']),
+            'super_heroes' => $superHeroRepository->findBy(['estDisponible' => true]),
+            'form' => $this->createForm(FiltreType::class, new SuperHero()),
         ]);
     }
 

@@ -16,28 +16,37 @@ class SuperHeroRepository extends ServiceEntityRepository
         parent::__construct($registry, SuperHero::class);
     }
 
-    //    /**
-    //     * @return SuperHero[] Returns an array of SuperHero objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('s')
-    //            ->andWhere('s.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('s.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function findByFilter(array $criteria): array {
+        return $this->createQueryBuilder('sp')
+            ->orWhere('sp.nom = :nom')
+            ->setParameter(':nom', $criteria['nom'])
+            ->orWhere('sp.estDisponible = :disponible')
+            ->setParameter(':disponible', $criteria['disponible'])
+            ->orWhere('sp.niveauEnergie = :energie')
+            ->setParameter('energie', $criteria['energie'])
+            ->getQuery()
+            ->getResult();
+        ;
+    }
 
-    //    public function findOneBySomeField($value): ?SuperHero
-    //    {
-    //        return $this->createQueryBuilder('s')
-    //            ->andWhere('s.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function findHeroByFilter(array $criteria): array {
+        $qb = $this->createQueryBuilder('sp');
+
+        if (!empty($criteria['nom'])) {
+            $qb->andWhere('sp.nom LIKE :nom')
+            ->setParameter('nom', '%' . $criteria['nom'] . '%');
+        }
+
+        if (!is_null($criteria['estDisponible'])) {
+            $qb->andWhere('sp.estDisponible = :disponible')
+            ->setParameter('disponible', $criteria['estDisponible']);
+        }
+
+        if (!empty($criteria['niveauEnergie'])) {
+            $qb->andWhere('sp.niveauEnergie >= :energie')
+            ->setParameter('energie', $criteria['niveauEnergie']);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 }
