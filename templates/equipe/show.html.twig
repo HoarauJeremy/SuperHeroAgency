@@ -3,32 +3,72 @@
 {% block title %}Equipe{% endblock %}
 
 {% block body %}
-    <h1>Equipe</h1>
-
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ equipe.id }}</td>
-            </tr>
-            <tr>
-                <th>Nom</th>
-                <td>{{ equipe.nom }}</td>
-            </tr>
-            <tr>
-                <th>EstActif</th>
-                <td>{{ equipe.estActif ? 'Yes' : 'No' }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ equipe.createdAt ? equipe.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_equipe_index') }}">back to list</a>
-
-    <a href="{{ path('app_equipe_edit', {'id': equipe.id}) }}">edit</a>
-
-    {{ include('equipe/_delete_form.html.twig') }}
+    <div class="flex flex-col w-full">
+        <h1>Equipe</h1>
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>Id</th>
+                    <td>{{ equipe.id }}</td>
+                </tr>
+                <tr>
+                    <th>Nom</th>
+                    <td>{{ equipe.nom }}</td>
+                </tr>
+                <tr>
+                    <th>EstActif</th>
+                    <td>{{ equipe.estActif ? 'Yes' : 'No' }}</td>
+                </tr>
+                <tr>
+                    <th>Chef d'equipe</th>
+                    <td>{{ equipe.chef.nom|capitalize }}</td>
+                </tr>
+                <tr>
+                    <th>Menbre de l'équipe</th>
+                    <td>
+                        <ul>
+                        {% for menbre in equipe.menbers %}
+                            <li>{{ menbre.nom }}</li>
+                        {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <hr class="w-10/12 border">
+        
+        <table>
+            <caption class="table-caption">Historique des missions</caption>
+            <thead>
+                <tr>
+                    <th>Titre</th>
+                    <th>Statut</th>
+                    <th>Debut</th>
+                    <th>Fin</th>
+                    <th>Localisation</th>
+                    <th>Niveau de danger</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for mission in equipe.missions %}
+                <tr class="border">
+                    <td>{{ mission.titre }}</td>
+                    <td>{{ mission.statut.value|capitalize }}</td>
+                    <td>{{ mission.debut ? mission.debut|date('d/m/Y H:i') : '' }}</td>
+                    <td>{{ mission.fin ? mission.fin|date('d/m/Y H:i') : '' }}</td>
+                    <td>{{ mission.localisation }}</td>
+                    <td>{{ mission.niveauDanger }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="9">Aucune missions disponible</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <a href="{{ path('app_equipe_index') }}">back to list</a>
+        <a href="{{ path('app_equipe_edit', {'id': equipe.id}) }}">edit</a>
+        {{ include('equipe/_delete_form.html.twig') }}
+        
+    </div>
 {% endblock %}
