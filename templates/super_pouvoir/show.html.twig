@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}SuperPouvoir{% endblock %}
+{% block title %}{{ super_pouvoir.nom|capitalize }}{% endblock %}
 
 {% block body %}
     <h1>SuperPouvoir</h1>
@@ -28,7 +28,7 @@
                 <td>
                     <ul>
                         {% for heros in super_pouvoir.superHeroes %}
-                            <li>{{ heros.nom }}</li>
+                            <li><a href="{{ path('app_super_heros_show', {'id': heros.id}) }}">{{ heros.nom|capitalize }}</a></li>
                         {% else %}
                             <li>Aucun héros n'est liée à ce pouvoir</li>
                         {% endfor %}
