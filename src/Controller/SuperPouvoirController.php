@@ -15,10 +15,14 @@ use Symfony\Component\Routing\Attribute\Route;
 final class SuperPouvoirController extends AbstractController
 {
     #[Route(name: 'index', methods: ['GET'])]
-    public function index(SuperPouvoirRepository $superPouvoirRepository): Response
+    public function index(SuperPouvoirRepository $superPouvoirRepository, Request $request): Response
     {
+
+        $page = $request->query->getInt('page',1);
+        $superPouvoirs = $superPouvoirRepository->findAllPaginated($page);
+
         return $this->render('super_pouvoir/index.html.twig', [
-            'super_pouvoirs' => $superPouvoirRepository->findAll(),
+            'super_pouvoirs' => $superPouvoirs,
         ]);
     }
 
