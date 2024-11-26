@@ -23,7 +23,7 @@
             <div class="flex items-center w-full bg-fuchsia-500">
                 <div class="w-1/3 px-2 py-1 border min-h-52">
                     {% if super_hero.nomImage is not null  %}
-                        <img class="w-full h-full" src="{{ asset('uploads/Images/' ~ super_hero.nomImage) }}" alt="{{ super_hero.nomImage }}">
+                        <img class="w-full h-full" src="{{ vich_uploader_asset(super_hero) }}" alt="{{ super_hero.nomImage }}">
                     {% else %}
                         Aucune image disponible
                     {% endif %}

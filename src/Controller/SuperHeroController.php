@@ -75,9 +75,7 @@ final class SuperHeroController extends AbstractController
 
     // TODO: mettre l'enregistrement de l'image dans une autre classe
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManage, SluggerInterface $slugger,
-        #[Autowire('%kernel.project_dir%/public/uploads/Images')] string $imageDirectory
-    ): Response
+    public function new(Request $request, EntityManagerInterface $entityManage): Response
     {
         $superHero = new SuperHero();
         $form = $this->createForm(SuperHeroType::class, $superHero);
@@ -85,25 +83,10 @@ final class SuperHeroController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $superHeroData = $form->getData();
-
-            $superHeroImage = $form->get('nomImage')->getData();
-
-            if ($superHeroImage) {
-                $originalImageName = pathinfo($superHeroImage->getClientOriginalName(), PATHINFO_FILENAME);
-                $safeImageName = $slugger->slug($originalImageName);
-                $newImageName = $safeImageName.'-'.uniqid().'.'.$superHeroImage->guessExtension();
-
-                try {
-                    $superHeroImage->move($imageDirectory, $newImageName);
-                } catch (FileException $e) {
-                    $e->getMessage();
-                }
-
-                $superHero->setNomImage($newImageName);
-            }
-            $superHeroData->setCreatedAt(new \DateTimeImmutable());
-            $entityManage->persist($superHeroData);
+            // $superHeroData = $form->getData();
+            // $superHeroData->setCreatedAt(new \DateTimeImmutable());
+            $superHero->setCreatedAt(new \DateTimeImmutable());
+            $entityManage->persist($superHero);
             $entityManage->flush();
 
             return $this->redirectToRoute('app_super_heros_index', [], Response::HTTP_SEE_OTHER);
