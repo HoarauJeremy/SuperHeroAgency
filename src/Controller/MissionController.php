@@ -15,10 +15,14 @@ use Symfony\Component\Routing\Attribute\Route;
 final class MissionController extends AbstractController
 {
     #[Route(name: 'index', methods: ['GET'])]
-    public function index(MissionRepository $missionRepository): Response
+    public function index(MissionRepository $missionRepository, Request $request): Response
     {
+
+        $page = $request->query->getInt('page',1);
+        $missions = $missionRepository->findAllPaginated($page);
+
         return $this->render('mission/index.html.twig', [
-            'missions' => $missionRepository->findAll(),
+            'missions' => $missions,
         ]);
     }
 

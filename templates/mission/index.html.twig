@@ -1,47 +1,55 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mission index{% endblock %}
+{% block title %}Missions{% endblock %}
 
 {% block body %}
-    <h1>Mission index</h1>
+    <div class="w-3/4 p-5 mx-auto bg-white h-3/4">
+        <div class="flex flex-col items-center justify-between">
+            <h1 class="mb-2 text-4xl font-bold">Missions</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Titre</th>
-                <th>Description</th>
-                <th>Statut</th>
-                <th>Debut</th>
-                <th>Fin</th>
-                <th>Localisation</th>
-                <th>NiveauDanger</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for mission in missions %}
-            <tr>
-                <td>{{ mission.id }}</td>
-                <td>{{ mission.titre }}</td>
-                <td>{{ mission.description }}</td>
-                <td>{{ mission.statut.value|capitalize }}</td>
-                <td>{{ mission.debut ? mission.debut|date('d/m/Y H:i') : '' }}</td>
-                <td>{{ mission.fin ? mission.fin|date('d/m/Y H:i') : '' }}</td>
-                <td>{{ mission.localisation }}</td>
-                <td>{{ mission.niveauDanger }}</td>
-                <td>
-                    <a href="{{ path('app_mission_show', {'id': mission.id}) }}">show</a>
-                    <a href="{{ path('app_mission_edit', {'id': mission.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="9">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            <a class="p-2 border border-black rounded" href="{{ path('app_mission_new') }}">Créer un nouveau pouvoir</a>
 
-    <a href="{{ path('app_mission_new') }}">Create new</a>
+            <table class="w-3/4 border">
+                <thead>
+                    <tr>
+                        <th>{{ knp_pagination_sortable(missions, 'ID', 'm.id') }}</th>
+                        <th>{{ knp_pagination_sortable(missions, 'Titre', 'm.titre') }}</th>
+                        <th>Description</th>
+                        <th>{{ knp_pagination_sortable(missions, 'Statut', 'm.statut') }}</th>
+                        <th>{{ knp_pagination_sortable(missions, 'Début', 'm.debut') }}</th>
+                        <th>{{ knp_pagination_sortable(missions, 'Fin', 'm.fin') }}</th>
+                        <th>{{ knp_pagination_sortable(missions, 'Localisation', 'm.localisation') }}</th>
+                        <th>{{ knp_pagination_sortable(missions, 'Niveau de danger', 'm.niveauDanger') }}</th>
+                        <th>actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for mission in missions %}
+                    <tr class="border">
+                        <td>{{ mission.id }}</td>
+                        <td>{{ mission.titre }}</td>
+                        <td>{{ mission.description }}</td>
+                        <td>{{ mission.statut.value|capitalize }}</td>
+                        <td>{{ mission.debut ? mission.debut|date('d/m/Y H:i') : '' }}</td>
+                        <td>{{ mission.fin ? mission.fin|date('d/m/Y H:i') : '' }}</td>
+                        <td>{{ mission.localisation }}</td>
+                        <td>{{ mission.niveauDanger }}</td>
+                        <td>
+                            <a href="{{ path('app_mission_show', {'id': mission.id}) }}">Afficher</a>
+                            <a href="{{ path('app_mission_edit', {'id': mission.id}) }}">Modifier</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="9">Aucune missions disponible</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            {{ knp_pagination_render(missions) }}
+
+        </div>
+    </div>
+
 {% endblock %}
