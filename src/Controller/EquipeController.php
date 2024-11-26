@@ -15,10 +15,14 @@ use Symfony\Component\Routing\Attribute\Route;
 final class EquipeController extends AbstractController
 {
     #[Route(name: 'index', methods: ['GET'])]
-    public function index(EquipeRepository $equipeRepository): Response
+    public function index(EquipeRepository $equipeRepository, Request $request): Response
     {
+
+        $page = $request->query->getInt('page',1);
+        $equipes = $equipeRepository->findAllPaginated($page);
+
         return $this->render('equipe/index.html.twig', [
-            'equipes' => $equipeRepository->findAll(),
+            'equipes' => $equipes,
         ]);
     }
 

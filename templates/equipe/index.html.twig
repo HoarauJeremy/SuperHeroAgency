@@ -1,39 +1,48 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Equipe index{% endblock %}
+{% block title %}Équipes{% endblock %}
 
 {% block body %}
-    <h1>Equipe index</h1>
+    <div class="w-3/4 p-5 mx-auto bg-white h-3/4">
+        <div class="flex flex-col items-center justify-between">
+            <h1 class="mb-2 text-4xl font-bold">Équipes</h1>
+        
+            <a class="p-2 border border-black rounded" href="{{ path('app_equipe_new') }}">Créer une nouvelle équipe</a>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nom</th>
-                <th>EstActif</th>
-                <th>CreatedAt</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for equipe in equipes %}
-            <tr>
-                <td>{{ equipe.id }}</td>
-                <td>{{ equipe.nom }}</td>
-                <td>{{ equipe.estActif ? 'Yes' : 'No' }}</td>
-                <td>{{ equipe.createdAt ? equipe.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_equipe_show', {'id': equipe.id}) }}">show</a>
-                    <a href="{{ path('app_equipe_edit', {'id': equipe.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            <table class="w-1/4 border">
+                <thead>
+                    <tr>
+                        <th>{{ knp_pagination_sortable(equipes, 'ID', 'e.id') }}</th>
+                        <th>{{ knp_pagination_sortable(equipes, 'Nom', 'e.nom') }}</th>
+                        <th>{{ knp_pagination_sortable(equipes, 'Actif', 'e.estActif') }}</th>
+                        <th>Créer le</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for equipe in equipes %}
+                    <tr class="border">
+                        <td>{{ equipe.id }}</td>
+                        <td>{{ equipe.nom }}</td>
+                        <td>{{ equipe.estActif ? 'Oui' : 'Non' }}</td>
+                        <td>{{ equipe.createdAt ? equipe.createdAt|date('d/m/Y H:i') : '' }}</td>
+                        <td>
+                            <a href="{{ path('app_equipe_show', {'id': equipe.id}) }}">Afficher</a>
+                            <a href="{{ path('app_equipe_edit', {'id': equipe.id}) }}">Modifier</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5">Aucune équipes disponible</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
 
-    <a href="{{ path('app_equipe_new') }}">Create new</a>
+            {{ knp_pagination_render(equipes) }}
+
+        </div>
+    </div>
+        
+
 {% endblock %}
