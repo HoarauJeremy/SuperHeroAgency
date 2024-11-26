@@ -13,21 +13,20 @@
                 {{ include('super_hero/_form.html.twig') }}
             </div> #}
 
-                <pre>
+                {# <pre>
                     {{ dump(super_heroes) }}
-                </pre>
+                </pre> #}
 
-                <table class="w-3/4 border">
+                <table class="w-3/4 border border-collapse border-slate-500">
                     <thead>
                         <tr>
-                            <th>{{ knp_pagination_sortable(super_heroes, 'ID', 'sp.id') }}</th>
-                            <th>{{ knp_pagination_sortable(super_heroes, 'Nom', 'sp.nom') }}</th>
-                            <th>{{ knp_pagination_sortable(super_heroes, 'Alter Ego', 'sp.alterEgo') }}</th>
-                            <th>{{ knp_pagination_sortable(super_heroes, 'Disponible', 'sp.estDisponible') }}</th>
-                            <th>{{ knp_pagination_sortable(super_heroes, 'Niveau d\'énergie', 'sp.niveauEnergie') }}</th>
-                            <th>Biographie</th>
-                            {# <th>Image</th> #}
-                            <th>actions</th>
+                            <th class="border border-slate-600">{{ knp_pagination_sortable(super_heroes, 'ID', 'sp.id') }}</th>
+                            <th class="border border-slate-600">{{ knp_pagination_sortable(super_heroes, 'Nom', 'sp.nom') }}</th>
+                            <th class="border border-slate-600">{{ knp_pagination_sortable(super_heroes, 'Alter Ego', 'sp.alterEgo') }}</th>
+                            <th class="border border-slate-600">{{ knp_pagination_sortable(super_heroes, 'Disponible', 'sp.estDisponible') }}</th>
+                            <th class="border border-slate-600">{{ knp_pagination_sortable(super_heroes, 'Niveau d\'énergie', 'sp.niveauEnergie') }}</th>
+                            <th class="border border-slate-600">Biographie</th>
+                            <th class="border border-slate-600">actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -39,7 +38,6 @@
                             <td>{{ super_hero.estDisponible ? 'Oui' : 'Non' }}</td>
                             <td>{{ super_hero.niveauEnergie }}</td>
                             <td>{{ super_hero.biographie }}</td>
-                            {# <td>{{ super_hero.nomImage }}</td> #}
                             <td>
                                 <a href="{{ path('app_super_heros_show', {'id': super_hero.id}) }}">Afficher</a>
                                 <a href="{{ path('app_super_heros_edit', {'id': super_hero.id}) }}">Modifier</a>
@@ -96,7 +94,6 @@
                     {% endfor %}
                     </tbody>
                 </table> #}
-            </div>
         </div>
     </div>
 {% endblock %}
