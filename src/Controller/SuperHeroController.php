@@ -19,20 +19,18 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 final class SuperHeroController extends AbstractController
 {
     #[Route(name: 'index', methods: ['GET', 'POST'])]
-    public function index(SuperHeroRepository $superHeroRepository): Response
+    public function index(SuperHeroRepository $superHeroRepository, Request $request): Response
     {
-
-        $superHerosFiltrer = [];
+        $page = $request->query->getInt('page',1);
+        $superHeros = $superHeroRepository->findAllPaginated($page);
 
         return $this->render('super_hero/index.html.twig', [
-            'super_heroes' => $superHeroRepository->findAll(),
-            'super_heroes_filter' => $superHerosFiltrer,
-            'form' => $this->createForm(FiltreType::class, new SuperHero(), [
-                'action' => $this->generateUrl('app_super_heros_filter'),
-            ]),
+            // 'super_heroes' => $superHeroRepository->findAll(),
+            'super_heroes' => $superHeros,
         ]);
     }
 
+    // TODO : Retravailler sur le filtre
     #[Route('/filter', name:'filter')]
     public function filter(Request $request, SuperHeroRepository $superHeroRepository) : Response
     {
@@ -75,6 +73,7 @@ final class SuperHeroController extends AbstractController
         ]);
     }
 
+    // TODO: mettre l'enregistrement de l'image dans une autre classe
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManage, SluggerInterface $slugger,
         #[Autowire('%kernel.project_dir%/public/uploads/Images')] string $imageDirectory
@@ -115,6 +114,7 @@ final class SuperHeroController extends AbstractController
             'form' => $form,
         ]);
     }
+
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
     public function show(SuperHero $superHero): Response

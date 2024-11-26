@@ -9,9 +9,9 @@
 
             <a class="p-2 border border-black rounded" href="{{ path('app_super_heros_new') }}">Ajouter un héros</a>
 
-            <div class="">
+            {# <div class="">
                 {{ include('super_hero/_form.html.twig') }}
-            </div>
+            </div> #}
 
                 <pre>
                     {{ dump(super_heroes) }}
@@ -20,11 +20,11 @@
                 <table class="w-3/4 border">
                     <thead>
                         <tr>
-                            <th>Id</th>
-                            <th>Nom</th>
-                            <th>Alter Ego</th>
-                            <th>Disponible</th>
-                            <th>Niveau d'énergie</th>
+                            <th>{{ knp_pagination_sortable(super_heroes, 'ID', 'sp.id') }}</th>
+                            <th>{{ knp_pagination_sortable(super_heroes, 'Nom', 'sp.nom') }}</th>
+                            <th>{{ knp_pagination_sortable(super_heroes, 'Alter Ego', 'sp.alterEgo') }}</th>
+                            <th>{{ knp_pagination_sortable(super_heroes, 'Disponible', 'sp.estDisponible') }}</th>
+                            <th>{{ knp_pagination_sortable(super_heroes, 'Niveau d\'énergie', 'sp.niveauEnergie') }}</th>
                             <th>Biographie</th>
                             {# <th>Image</th> #}
                             <th>actions</th>
@@ -53,12 +53,17 @@
                     </tbody>
                 </table>
 
+                {{ knp_pagination_render(super_heroes) }}
+
                 <br><br>
                 <hr>
                 <br><br>
 
 
-                <table class="w-3/4 border">
+
+
+
+                {# <table class="w-3/4 border">
                     <thead>
                         <tr>
                             <th>Id</th>
@@ -67,7 +72,6 @@
                             <th>Disponible</th>
                             <th>Niveau d'énergie</th>
                             <th>Biographie</th>
-                            {# <th>Image</th> #}
                             <th>actions</th>
                         </tr>
                     </thead>
@@ -80,7 +84,6 @@
                             <td>{{ super_heross.estDisponible ? 'Oui' : 'Non' }}</td>
                             <td>{{ super_heross.niveauEnergie }}</td>
                             <td>{{ super_heross.biographie }}</td>
-                            {# <td>{{ super_heross.nomImage }}</td> #}
                             <td>
                                 <a href="{{ path('app_super_heros_show', {'id': super_heross.id}) }}">Afficher</a>
                                 <a href="{{ path('app_super_heros_edit', {'id': super_heross.id}) }}">Modifier</a>
@@ -92,7 +95,7 @@
                         </tr>
                     {% endfor %}
                     </tbody>
-                </table>
+                </table> #}
             </div>
         </div>
     </div>
