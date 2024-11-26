@@ -2,13 +2,17 @@
 
 namespace App\Entity;
 
-use App\Repository\SuperHeroRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\SuperHeroRepository;
+use Doctrine\Common\Collections\Collection;
+use Symfony\Component\HttpFoundation\File\File;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: SuperHeroRepository::class)]
+#[Vich\Uploadable()]
 class SuperHero
 {
     #[ORM\Id]
@@ -33,6 +37,13 @@ class SuperHero
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $nomImage = null;
+
+    #[Vich\UploadableField(mapping: 'super_heros', fileNameProperty: 'nomImage')]
+    #[Assert\Image(
+        mimeTypes: ['image/jpg', 'image/jpeg', 'image/png'],
+        mimeTypesMessage: 'Veuillez téléverser une image valide (png, jpeg, jpg)'
+    )]
+    private ?File $imageFile = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
@@ -194,6 +205,26 @@ class SuperHero
     public function removePouvoir(SuperPouvoir $pouvoir): static
     {
         $this->Pouvoir->removeElement($pouvoir);
+
+        return $this;
+    }
+
+    /**
+     * Get the value of imageFile
+     */ 
+    public function getImageFile()
+    {
+        return $this->imageFile;
+    }
+
+    /**
+     * Set the value of imageFile
+     *
+     * @return  self
+     */ 
+    public function setImageFile($imageFile)
+    {
+        $this->imageFile = $imageFile;
 
         return $this;
     }
