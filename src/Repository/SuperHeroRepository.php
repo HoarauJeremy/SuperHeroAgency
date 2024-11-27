@@ -18,7 +18,7 @@ class SuperHeroRepository extends ServiceEntityRepository
         parent::__construct($registry, SuperHero::class);
     }
 
-    public function findByFilter(array $criteria): array {
+    /* public function findByFilter(array $criteria): array {
         return $this->createQueryBuilder('sp')
             ->orWhere('sp.nom = :nom')
             ->setParameter(':nom', $criteria['nom'])
@@ -29,9 +29,9 @@ class SuperHeroRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
         ;
-    }
+    } */
 
-    public function findHeroByFilter(array $criteria): array {
+    /* public function findHeroByFilter(array $criteria): array {
         $qb = $this->createQueryBuilder('sp');
 
         if (!empty($criteria['nom'])) {
@@ -50,15 +50,17 @@ class SuperHeroRepository extends ServiceEntityRepository
         }
 
         return $qb->getQuery()->getResult();
-    }
+    } */
 
+    //-------
+
+    
     /**
      * Retrouve toutes les données dans le repository et permet de créer la pagination.
      * @param int $page Le numero de la page
      * @return \Knp\Component\Pager\Pagination\PaginationInterface les données pour créer la pagination
      */
     public function findAllPaginated(int $page): PaginationInterface {
-        
         return $this->paginator->paginate(
             $this->createQueryBuilder('sp'),
             $page,
@@ -68,6 +70,44 @@ class SuperHeroRepository extends ServiceEntityRepository
                 'sortFieldAllowList' => ['sp.id', 'sp.nom', 'sp.alterEgo', 'sp.estDisponible', 'sp.niveauEnergie']
             ]
         );
+    }
 
+    /**
+     * Retrouve toutes les données filtrés par les disponibilité et/ou le niveau d'énergie de l'entité {@link App\Entity\SuperHero SuperHero}.
+     * @param int $page Le numéro de la pages selectioner
+     * @param ?bool|null $disponible Definit si un super héros est disponible ou non  
+     * @param mixed $niveauEnergie Definit le niveau d'énergie minimum d'un super héros 
+     * @param string $operateur Definit le type de l'expression (AND ou OR)
+     * @return \Knp\Component\Pager\Pagination\PaginationInterface
+     */
+    public function findAllPaginatedByFiltre(int $page, ?bool $disponible, ?int $niveauEnergie, string $operateur = "or"): PaginationInterface {
+        $qb = $this->createQueryBuilder('f');
+
+        if($disponible !== null || $niveauEnergie !== null) {
+            // Choisir le type d'expression (AND ou OR)
+            $expression = $operateur === 'and' ? $qb->expr()->andX() : $qb->expr()->orX();
+
+            if ($disponible !== null) {
+                $expression->add($qb->expr()->eq('f.estDisponible', ':disponible'));
+                $qb->setParameter('disponible', $disponible);
+            }
+            
+            if ($niveauEnergie !== null) {
+                $expression->add($qb->expr()->gte('f.niveauEnergie', ':niveauEnergie'));
+                $qb->setParameter('niveauEnergie', $niveauEnergie);
+            }
+            
+            $qb->andWhere($expression);
+        }
+
+        return $this->paginator->paginate(
+            $qb->getQuery()->getResult(),
+            $page,
+            10,
+            [
+                'distinct' => true,
+                'sortFieldAllowList' => ['sp.id', 'sp.nom', 'sp.alterEgo', 'sp.estDisponible', 'sp.niveauEnergie']
+            ]
+        );
     }
 }
