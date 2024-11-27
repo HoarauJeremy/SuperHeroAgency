@@ -86,7 +86,7 @@ class SuperHeroRepository extends ServiceEntityRepository
         if($disponible !== null || $niveauEnergie !== null) {
             // Choisir le type d'expression (AND ou OR)
             $expression = $operateur === 'and' ? $qb->expr()->andX() : $qb->expr()->orX();
-            
+
             if ($disponible !== null) {
                 $expression->add($qb->expr()->eq('f.estDisponible', ':disponible'));
                 $qb->setParameter('disponible', $disponible);
@@ -99,8 +99,6 @@ class SuperHeroRepository extends ServiceEntityRepository
             
             $qb->andWhere($expression);
         }
-
-        dd( $disponible, $niveauEnergie, $operateur, $qb->getQuery()->getResult());
 
         return $this->paginator->paginate(
             $qb->getQuery()->getResult(),
