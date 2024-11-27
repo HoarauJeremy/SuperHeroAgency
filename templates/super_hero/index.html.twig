@@ -1,27 +1,24 @@
 {% extends 'base.html.twig' %}
+{% import "macro/bouton.twig" as btn %}
 
 {% block title %}Super Héros{% endblock %}
 
 {% block body %}
-    <div class="w-3/4 p-5 mx-auto bg-white h-3/4">
-        <div class="flex flex-col items-center justify-between">
+    <div class="w-full p-5 mx-auto h-3/4">
+        <div class="flex justify-between w-full mb-1">
             <h1 class="mb-2 text-4xl font-bold">Super Héros</h1>
+            {# <a class="p-2 border border-black rounded" href="{{ path('app_super_heros_new') }}">Ajouter un héros</a> #}
+            {{ btn.ajoutData(href: path('app_super_heros_new'), label: 'Ajouter un héros') }}
+        </div>
+        
+        <div class="flex items-center justify-between h-full">
 
-            <a class="p-2 border border-black rounded" href="{{ path('app_super_heros_new') }}">Ajouter un héros</a>
-
-            <div class="">
-                <pre>
-                    {{ dump(super_heroes) }}
-                </pre>
-            
+            <div class="flex flex-col w-1/4 h-full px-2 py-3 m-1 border border-fuchsia-500">
                 {{ include('super_hero/_filtre_form.html.twig') }}
             </div>
 
-                {# <pre>
-                    {{ dump(super_heroes) }}
-                </pre> #}
-
-                <table class="w-3/4 border border-collapse border-slate-500">
+            <div class="flex flex-col items-center w-3/4 p-2">
+                <table class="w-full text-center border-collapse order border-slate-500">
                     <thead>
                         <tr>
                             <th class="border border-slate-600">{{ knp_pagination_sortable(super_heroes, 'ID', 'sp.id') }}</th>
@@ -54,50 +51,8 @@
                     {% endfor %}
                     </tbody>
                 </table>
-
                 {{ knp_pagination_render(super_heroes) }}
-
-                <br><br>
-                <hr>
-                <br><br>
-
-
-
-
-
-                {# <table class="w-3/4 border">
-                    <thead>
-                        <tr>
-                            <th>Id</th>
-                            <th>Nom</th>
-                            <th>Alter Ego</th>
-                            <th>Disponible</th>
-                            <th>Niveau d'énergie</th>
-                            <th>Biographie</th>
-                            <th>actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {% for super_heross in super_heroes_filter %}
-                        <tr class="border">
-                            <td>{{ super_heross.id }}</td>
-                            <td>{{ super_heross.nom }}</td>
-                            <td>{{ super_heross.alterEgo }}</td>
-                            <td>{{ super_heross.estDisponible ? 'Oui' : 'Non' }}</td>
-                            <td>{{ super_heross.niveauEnergie }}</td>
-                            <td>{{ super_heross.biographie }}</td>
-                            <td>
-                                <a href="{{ path('app_super_heros_show', {'id': super_heross.id}) }}">Afficher</a>
-                                <a href="{{ path('app_super_heros_edit', {'id': super_heross.id}) }}">Modifier</a>
-                            </td>
-                        </tr>
-                    {% else %}
-                        <tr>
-                            <td colspan="8">Aucun héros disponible</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table> #}
+            </div>
         </div>
     </div>
 {% endblock %}

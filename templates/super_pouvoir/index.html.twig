@@ -1,4 +1,5 @@
 {% extends 'base.html.twig' %}
+{% import "macro/bouton.twig" as btn %}
 
 {% block title %}Super Pouvoir{% endblock %}
 
@@ -7,7 +8,7 @@
             <div class="flex flex-col items-center justify-between">                
                 <h1 class="mb-2 text-4xl font-bold">Super Pouvoir</h1>
                 
-                <a href="{{ path('app_super_pouvoir_new') }}">Ajouter un nouveau pouvoir</a>
+                {{ btn.ajoutData(href: path('app_super_pouvoir_new'), label: "Ajouter un nouveau pouvoir") }}
 
                 <table class="w-3/4 border">
                     <thead>
