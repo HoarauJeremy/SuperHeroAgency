@@ -18,7 +18,7 @@ class SuperHeroRepository extends ServiceEntityRepository
         parent::__construct($registry, SuperHero::class);
     }
 
-    public function findByFilter(array $criteria): array {
+    /* public function findByFilter(array $criteria): array {
         return $this->createQueryBuilder('sp')
             ->orWhere('sp.nom = :nom')
             ->setParameter(':nom', $criteria['nom'])
@@ -29,9 +29,9 @@ class SuperHeroRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
         ;
-    }
+    } */
 
-    public function findHeroByFilter(array $criteria): array {
+    /* public function findHeroByFilter(array $criteria): array {
         $qb = $this->createQueryBuilder('sp');
 
         if (!empty($criteria['nom'])) {
@@ -50,15 +50,17 @@ class SuperHeroRepository extends ServiceEntityRepository
         }
 
         return $qb->getQuery()->getResult();
-    }
+    } */
 
+    //-------
+
+    
     /**
      * Retrouve toutes les données dans le repository et permet de créer la pagination.
      * @param int $page Le numero de la page
      * @return \Knp\Component\Pager\Pagination\PaginationInterface les données pour créer la pagination
      */
     public function findAllPaginated(int $page): PaginationInterface {
-        
         return $this->paginator->paginate(
             $this->createQueryBuilder('sp'),
             $page,
@@ -68,6 +70,56 @@ class SuperHeroRepository extends ServiceEntityRepository
                 'sortFieldAllowList' => ['sp.id', 'sp.nom', 'sp.alterEgo', 'sp.estDisponible', 'sp.niveauEnergie']
             ]
         );
+    }
 
+    /**
+     * Retrouve toutes les données de l'entité {@link App\Entity\SuperHero Super Héros} filtrés par leur diponibilité dans le repository 
+     * @param int $page
+     * @param bool $estDisponible
+     * @return \Knp\Component\Pager\Pagination\PaginationInterface
+     */
+    public function findAllPaginatedBy(int $page, bool $estDisponible): PaginationInterface {
+        return $this->paginator->paginate(
+            $this->createQueryBuilder('sp')->where('sp.estDisponible = :disponible')->setParameter(':disponible', $estDisponible),
+            $page,
+            10,
+            [
+                'distinct' => true,
+                'sortFieldAllowList' => ['sp.id', 'sp.nom', 'sp.alterEgo', 'sp.estDisponible', 'sp.niveauEnergie']
+            ]
+        );
+    }
+
+    
+    public function findByFiltre(int $page, ?bool $disponible, ?int $niveauEnergie): PaginationInterface {
+        $qb = $this->createQueryBuilder('f');
+
+        if($disponible !== null || $niveauEnergie !== null) {
+            $orX = $qb->expr()->orX();
+
+            if ($disponible !== null) {
+                $orX->add($qb->expr()->eq('f.estDisponible', ':disponible'));
+                $qb->setParameter('disponible', $disponible);
+            }
+    
+            if ($niveauEnergie !== null) {
+                $orX->add($qb->expr()->gte('f.niveauEnergie', ':niveauEnergie'));
+                $qb->setParameter('niveauEnergie', $niveauEnergie);
+            }
+
+            $qb->andWhere($orX);
+        }
+
+        // dd($disponible, $niveauEnergie, $qb->getQuery()->getResult());
+
+        return $this->paginator->paginate(
+            $qb->getQuery()->getResult(),
+            $page,
+            10,
+            [
+                'distinct' => true,
+                'sortFieldAllowList' => ['sp.id', 'sp.nom', 'sp.alterEgo', 'sp.estDisponible', 'sp.niveauEnergie']
+            ]
+        );
     }
 }

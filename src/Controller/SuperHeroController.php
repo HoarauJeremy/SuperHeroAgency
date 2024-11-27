@@ -22,58 +22,49 @@ final class SuperHeroController extends AbstractController
     public function index(SuperHeroRepository $superHeroRepository, Request $request): Response
     {
         $page = $request->query->getInt('page',1);
-        $superHeros = $superHeroRepository->findAllPaginated($page);
+        // $superHeros = $superHeroRepository->findAllPaginated($page);
+
+        // Récupérer les paramètres de filtre
+        $disponible = $request->query->get('disponible'); // "true" ou "false"
+        $niveauEnergie = $request->query->get('niveauEnergie'); // ex: "50"
+
+        // Convertir les paramètres si nécessaires
+        $disponible = $disponible !== null ? filter_var($disponible, FILTER_VALIDATE_BOOLEAN) : null;
+        $niveauEnergie = $niveauEnergie !== null ? (int)$niveauEnergie : null;
+
+        dd($disponible);
+
+        // Récupérer les super-héros filtrés
+        if ($disponible !== null || $niveauEnergie !== null) {
+            $superHeros = $superHeroRepository->findByFiltre($page, $disponible, $niveauEnergie);
+        } else {
+            // Si aucun filtre n'est appliqué, paginer les résultats
+            $superHeros = $superHeroRepository->findAllPaginated($page);
+        }
 
         return $this->render('super_hero/index.html.twig', [
-            // 'super_heroes' => $superHeroRepository->findAll(),
             'super_heroes' => $superHeros,
         ]);
     }
 
-    // TODO : Retravailler sur le filtre
-    #[Route('/filter', name:'filter')]
+    /* #[Route('/filter', name:'filter')]
     public function filter(Request $request, SuperHeroRepository $superHeroRepository) : Response
     {
-        $heros = new SuperHero();
-        $form = $this->createForm(FiltreType::class,$heros, [
-            'action' => $this->generateUrl('app_super_heros_filter'),
-        ]);
-        $form->handleRequest($request);
-
-        $superHerosFiltrer = $superHeroRepository->findAll();
-
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            $superHeros = $form->getData();
-
-            $tab = [
-                'nom' => $superHeros->getNom() ?: null,
-                'estDisponible' => $superHeros->isEstDisponible() ?: null,
-                'niveauEnergie' => $superHeros->getNiveauEnergie() ?: null,
-            ];
-
-            $superHerosFiltrer = $superHeroRepository->findHeroByFilter($tab);
-        }
-
-        // dd($superHerosFiltrer);
-
+        
         return $this->render('super_hero/index.html.twig', [
             'super_heroes' => $superHeroRepository->findAll(),
-            'super_heroes_filter' => $superHerosFiltrer,
-            'form' => $form->createView(),
         ]);
-    }
+    } */
 
-    #[Route('/available', name: 'available')]
-    public function available(SuperHeroRepository $superHeroRepository) : Response 
+    /* #[Route('/available', name: 'available')]
+    public function available(SuperHeroRepository $superHeroRepository, Request $request) : Response 
     {
+        $page = $request->query->getInt('page',1);
         return $this->render('super_hero/index.html.twig', [
-            'super_heroes' => $superHeroRepository->findBy(['estDisponible' => true]),
-            'form' => $this->createForm(FiltreType::class, new SuperHero()),
+            'super_heroes' => $superHeroRepository->findAllPaginatedBy($page, true),
         ]);
-    }
+    } */
 
-    // TODO: mettre l'enregistrement de l'image dans une autre classe
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManage): Response
     {
