@@ -1,0 +1,20 @@
+<form method="get" action="{{ path('app_super_heros_index') }}">
+
+    <label for="disponible">Disponibilité</label>
+    <select name="disponible" id="disponible">
+        <option value="">-- Tous --</option>
+        <option value="true" {% if app.request.query.get('disponible') == 'true' %}selected{% endif %}>Disponible</option>
+        <option value="false" {% if app.request.query.get('disponible') == 'false' %}selected{% endif %}>Non disponible</option>
+    </select>
+
+    <label for="operateur">Recherche</label>
+    <select name="operateur" id="operateur">
+        <option value="or" {% if app.request.query.get('operateur') == 'or' %}selected{% endif %}>Ou</option>
+        <option value="and" {% if app.request.query.get('operateur') == 'and' %}selected{% endif %}>Et</option>
+    </select>
+
+    <label for="niveauEnergie">Niveau d'énergie minimum</label>
+    <input type="number" name="niveauEnergie" id="niveauEnergie" value="{{ app.request.query.get('niveauEnergie') }}">
+
+    <button type="submit">Filtrer</button>
+</form>

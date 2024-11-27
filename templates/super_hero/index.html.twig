@@ -10,8 +10,11 @@
             <a class="p-2 border border-black rounded" href="{{ path('app_super_heros_new') }}">Ajouter un héros</a>
 
             <div class="">
-                {# {{ include('super_hero/_form.html.twig') }} #}
-                {# <a href="{{ path('app_super_heros_available') }}">Disponible</a> #}
+                <pre>
+                    {{ dump(super_heroes) }}
+                </pre>
+            
+                {{ include('super_hero/_filtre_form.html.twig') }}
             </div>
 
                 {# <pre>

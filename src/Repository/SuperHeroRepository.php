@@ -73,44 +73,34 @@ class SuperHeroRepository extends ServiceEntityRepository
     }
 
     /**
-     * Retrouve toutes les données de l'entité {@link App\Entity\SuperHero Super Héros} filtrés par leur diponibilité dans le repository 
-     * @param int $page
-     * @param bool $estDisponible
+     * Retrouve toutes les données filtrés par les disponibilité et/ou le niveau d'énergie de l'entité {@link App\Entity\SuperHero SuperHero}.
+     * @param int $page Le numéro de la pages selectioner
+     * @param ?bool|null $disponible Definit si un super héros est disponible ou non  
+     * @param mixed $niveauEnergie Definit le niveau d'énergie minimum d'un super héros 
+     * @param string $operateur Definit le type de l'expression (AND ou OR)
      * @return \Knp\Component\Pager\Pagination\PaginationInterface
      */
-    public function findAllPaginatedBy(int $page, bool $estDisponible): PaginationInterface {
-        return $this->paginator->paginate(
-            $this->createQueryBuilder('sp')->where('sp.estDisponible = :disponible')->setParameter(':disponible', $estDisponible),
-            $page,
-            10,
-            [
-                'distinct' => true,
-                'sortFieldAllowList' => ['sp.id', 'sp.nom', 'sp.alterEgo', 'sp.estDisponible', 'sp.niveauEnergie']
-            ]
-        );
-    }
-
-    
-    public function findByFiltre(int $page, ?bool $disponible, ?int $niveauEnergie): PaginationInterface {
+    public function findAllPaginatedByFiltre(int $page, ?bool $disponible, ?int $niveauEnergie, string $operateur = "or"): PaginationInterface {
         $qb = $this->createQueryBuilder('f');
 
         if($disponible !== null || $niveauEnergie !== null) {
-            $orX = $qb->expr()->orX();
-
+            // Choisir le type d'expression (AND ou OR)
+            $expression = $operateur === 'and' ? $qb->expr()->andX() : $qb->expr()->orX();
+            
             if ($disponible !== null) {
-                $orX->add($qb->expr()->eq('f.estDisponible', ':disponible'));
+                $expression->add($qb->expr()->eq('f.estDisponible', ':disponible'));
                 $qb->setParameter('disponible', $disponible);
             }
-    
+            
             if ($niveauEnergie !== null) {
-                $orX->add($qb->expr()->gte('f.niveauEnergie', ':niveauEnergie'));
+                $expression->add($qb->expr()->gte('f.niveauEnergie', ':niveauEnergie'));
                 $qb->setParameter('niveauEnergie', $niveauEnergie);
             }
-
-            $qb->andWhere($orX);
+            
+            $qb->andWhere($expression);
         }
 
-        // dd($disponible, $niveauEnergie, $qb->getQuery()->getResult());
+        dd( $disponible, $niveauEnergie, $operateur, $qb->getQuery()->getResult());
 
         return $this->paginator->paginate(
             $qb->getQuery()->getResult(),

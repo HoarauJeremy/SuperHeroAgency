@@ -22,21 +22,19 @@ final class SuperHeroController extends AbstractController
     public function index(SuperHeroRepository $superHeroRepository, Request $request): Response
     {
         $page = $request->query->getInt('page',1);
-        // $superHeros = $superHeroRepository->findAllPaginated($page);
 
         // Récupérer les paramètres de filtre
         $disponible = $request->query->get('disponible'); // "true" ou "false"
         $niveauEnergie = $request->query->get('niveauEnergie'); // ex: "50"
+        $operateur = $request->query->get('operateur', 'or'); // "OR" ou "AND"
 
         // Convertir les paramètres si nécessaires
-        $disponible = $disponible !== null ? filter_var($disponible, FILTER_VALIDATE_BOOLEAN) : null;
-        $niveauEnergie = $niveauEnergie !== null ? (int)$niveauEnergie : null;
+        $disponible = $disponible !== null && $disponible !== '' ? filter_var($disponible, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) : null;
+        $niveauEnergie = $niveauEnergie !== null && $niveauEnergie !== '' ? (int)$niveauEnergie : null;
 
-        dd($disponible);
-
-        // Récupérer les super-héros filtrés
-        if ($disponible !== null || $niveauEnergie !== null) {
-            $superHeros = $superHeroRepository->findByFiltre($page, $disponible, $niveauEnergie);
+        if($disponible !== null || $niveauEnergie !== null) {
+            // Récupérer les super-héros filtrés
+            $superHeros = $superHeroRepository->findAllPaginatedByFiltre($page, $disponible, $niveauEnergie, $operateur);
         } else {
             // Si aucun filtre n'est appliqué, paginer les résultats
             $superHeros = $superHeroRepository->findAllPaginated($page);
@@ -46,24 +44,6 @@ final class SuperHeroController extends AbstractController
             'super_heroes' => $superHeros,
         ]);
     }
-
-    /* #[Route('/filter', name:'filter')]
-    public function filter(Request $request, SuperHeroRepository $superHeroRepository) : Response
-    {
-        
-        return $this->render('super_hero/index.html.twig', [
-            'super_heroes' => $superHeroRepository->findAll(),
-        ]);
-    } */
-
-    /* #[Route('/available', name: 'available')]
-    public function available(SuperHeroRepository $superHeroRepository, Request $request) : Response 
-    {
-        $page = $request->query->getInt('page',1);
-        return $this->render('super_hero/index.html.twig', [
-            'super_heroes' => $superHeroRepository->findAllPaginatedBy($page, true),
-        ]);
-    } */
 
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManage): Response
