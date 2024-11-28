@@ -3,17 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\SuperHero;
-use App\Form\FiltreType;
 use App\Form\SuperHeroType;
 use App\Repository\SuperHeroRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/superheros', name: 'app_super_heros_')]
 final class SuperHeroController extends AbstractController
@@ -71,8 +67,14 @@ final class SuperHeroController extends AbstractController
 
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
-    public function show(SuperHero $superHero): Response
+    public function show(SuperHero $superHero, int $id, SuperHeroRepository $superHeroRepository): Response
     {
+
+        $data = $superHeroRepository->getMissionsBySuperHero($id);
+        // $data = $superHeroRepository->getStatutMissionParHeros($id);
+
+        dd($data);
+
         return $this->render('super_hero/show.html.twig', [
             'super_hero' => $superHero,
         ]);
