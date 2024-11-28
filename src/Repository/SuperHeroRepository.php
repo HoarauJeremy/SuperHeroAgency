@@ -110,4 +110,45 @@ class SuperHeroRepository extends ServiceEntityRepository
             ]
         );
     }
+
+
+    /* 
+    
+        ->select('e.nom AS equipeNom, 
+                COUNT(m.id) AS totalMissions, 
+                SUM(CASE WHEN m.statut = :statut THEN 1 ELSE 0 END) AS missionsReussies')
+        ->join('m.equipeEnCharge', 'e')
+        ->groupBy('e.id')
+        ->setParameter('statut', 'TERMINER');
+    
+    */
+
+    public function getStatutMissionParHeros(int $superHeroId): array
+    {
+        $qb = $this->createQueryBuilder('m')
+        ->select('
+            m.statut AS statut,
+            COUNT(m.id) AS total
+        ')
+        ->join('m.equipeEnCharge', 'e')
+        ->join('e.menbers', 'sh')
+        ->where('sh.id = :superHeroId')
+        ->setParameter('superHeroId', $superHeroId)
+        ->groupBy('m.statut');
+
+        dd($qb->getQuery()->getResult());
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function getMissionsBySuperHero(int $superHeroId): array
+{
+    return $this->createQueryBuilder('m')
+        ->join('m.equipeEnCharge', 'e') // Liaison entre Mission et Equipe
+        ->join('e.menbers', 'sh')       // Liaison entre Equipe et SuperHero
+        ->where('sh.id = :superHeroId') // Filtre par ID du SuperHero
+        ->setParameter('superHeroId', $superHeroId)
+        ->getQuery()
+        ->getResult();
+}
 }

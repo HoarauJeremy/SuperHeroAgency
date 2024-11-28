@@ -35,4 +35,20 @@ class MissionRepository extends ServiceEntityRepository
         );
     }
 
+    public function getTauxReussiteEquipe(int $idEquipe): array
+    {
+        $qb = $this->createQueryBuilder('m')
+            ->select('
+                COUNT(m.id) AS totalMissions, 
+                SUM(CASE WHEN m.statut = :statut THEN 1 ELSE 0 END) AS missionsReussies')
+            ->where('m.equipeEnCharge = :idEquipe')
+            ->setParameter('idEquipe', $idEquipe)
+            ->setParameter('statut', 'TERMINER');
+
+            // dd($qb->getQuery()->getResult());
+
+        return $qb->getQuery()->getResult();
+    }
+
+
 }
