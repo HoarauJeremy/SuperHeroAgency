@@ -49,21 +49,28 @@ class SuperHero
     private ?\DateTimeImmutable $createdAt = null;
 
     /**
-     * @var Collection<int, Equipe>
-     */
-    #[ORM\OneToMany(targetEntity: Equipe::class, mappedBy: 'chef')]
-    private Collection $equipes;
-
-    /**
      * @var Collection<int, SuperPouvoir>
      */
     #[ORM\ManyToMany(targetEntity: SuperPouvoir::class, inversedBy: 'superHeroes')]
     private Collection $Pouvoir;
 
+    /**
+     * @var Collection<int, Equipe>
+     */
+    #[ORM\OneToMany(targetEntity: Equipe::class, mappedBy: 'chef')]
+    private Collection $equipesGerees;
+
+    /**
+     * @var Collection<int, Equipe>
+     */
+    #[ORM\ManyToMany(targetEntity: Equipe::class, mappedBy: 'membres')]
+    private Collection $equipes;
+
     public function __construct()
     {
         $this->equipes = new ArrayCollection();
         $this->Pouvoir = new ArrayCollection();
+        $this->equipesGerees = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -156,36 +163,6 @@ class SuperHero
     }
 
     /**
-     * @return Collection<int, Equipe>
-     */
-    public function getEquipes(): Collection
-    {
-        return $this->equipes;
-    }
-
-    public function addEquipe(Equipe $equipe): static
-    {
-        if (!$this->equipes->contains($equipe)) {
-            $this->equipes->add($equipe);
-            $equipe->setChef($this);
-        }
-
-        return $this;
-    }
-
-    public function removeEquipe(Equipe $equipe): static
-    {
-        if ($this->equipes->removeElement($equipe)) {
-            // set the owning side to null (unless already changed)
-            if ($equipe->getChef() === $this) {
-                $equipe->setChef(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection<int, SuperPouvoir>
      */
     public function getPouvoir(): Collection
@@ -225,6 +202,63 @@ class SuperHero
     public function setImageFile($imageFile)
     {
         $this->imageFile = $imageFile;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Equipe>
+     */
+    public function getEquipesGerees(): Collection
+    {
+        return $this->equipesGerees;
+    }
+
+    public function addEquipesGeree(Equipe $equipesGeree): static
+    {
+        if (!$this->equipesGerees->contains($equipesGeree)) {
+            $this->equipesGerees->add($equipesGeree);
+            $equipesGeree->setChef($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEquipesGeree(Equipe $equipesGeree): static
+    {
+        if ($this->equipesGerees->removeElement($equipesGeree)) {
+            // set the owning side to null (unless already changed)
+            if ($equipesGeree->getChef() === $this) {
+                $equipesGeree->setChef(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Equipe>
+     */
+    public function getEquipes(): Collection
+    {
+        return $this->equipes;
+    }
+
+    public function addEquipe(Equipe $equipe): static
+    {
+        if (!$this->equipes->contains($equipe)) {
+            $this->equipes->add($equipe);
+            $equipe->addMembre($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEquipe(Equipe $equipe): static
+    {
+        if ($this->equipes->removeElement($equipe)) {
+            $equipe->removeMembre($this);
+        }
 
         return $this;
     }

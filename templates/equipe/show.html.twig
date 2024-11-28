@@ -24,11 +24,11 @@
                     <td>{{ equipe.chef.nom|capitalize }}</td>
                 </tr>
                 <tr>
-                    <th>Menbre de l'équipe</th>
+                    <th>Membre de l'équipe</th>
                     <td>
                         <ul>
-                        {% for menbre in equipe.menbers %}
-                            <li>{{ menbre.nom }}</li>
+                        {% for membre in equipe.membres %}
+                            <li>{{ membre.nom }}</li>
                         {% endfor %}
                         </ul>
                     </td>

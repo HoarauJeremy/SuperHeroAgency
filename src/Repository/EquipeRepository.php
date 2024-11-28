@@ -18,13 +18,12 @@ class EquipeRepository extends ServiceEntityRepository
         parent::__construct($registry, Equipe::class);
     }
 
-        /**
+    /**
      * Retrouve toutes les données dans le repository et permet de créer la pagination.
      * @param int $page Le numero de la page
      * @return \Knp\Component\Pager\Pagination\PaginationInterface les données pour créer la pagination
      */
     public function findAllPaginated(int $page): PaginationInterface {
-        
         return $this->paginator->paginate(
             $this->createQueryBuilder('e'),
             $page,

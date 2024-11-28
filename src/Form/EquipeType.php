@@ -21,7 +21,7 @@ class EquipeType extends AbstractType
                 'class' => SuperHero::class,
                 'choice_label' => 'nom',
             ])
-            ->add('menbers', EntityType::class, [
+            ->add('membres', EntityType::class, [
                 'class' => SuperHero::class,
                 'choice_label' => 'nom',
                 'multiple' => true,
