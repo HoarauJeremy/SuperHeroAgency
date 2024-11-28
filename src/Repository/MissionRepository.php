@@ -18,13 +18,12 @@ class MissionRepository extends ServiceEntityRepository
         parent::__construct($registry, Mission::class);
     }
 
-        /**
+    /**
      * Retrouve toutes les données dans le repository et permet de créer la pagination.
      * @param int $page Le numero de la page
      * @return \Knp\Component\Pager\Pagination\PaginationInterface les données pour créer la pagination
      */
     public function findAllPaginated(int $page): PaginationInterface {
-        
         return $this->paginator->paginate(
             $this->createQueryBuilder('m'),
             $page,
@@ -34,7 +33,6 @@ class MissionRepository extends ServiceEntityRepository
                 'sortFieldAllowList' => ['m.id', 'm.titre', 'm.statut', 'm.debut', 'm.fin', 'm.localisation', 'm.niveauDanger']
             ]
         );
-
     }
 
 }

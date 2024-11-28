@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use App\Repository\EquipeRepository;
+use App\Repository\MissionRepository;
+use App\Repository\SuperHeroRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -15,8 +18,18 @@ class HomeController extends AbstractController
     }
 
     #[Route('/dashboard', name:'app_dashboard')]
-    public function dashboards(): Response
+    public function dashboards(MissionRepository $missions, SuperHeroRepository $superHero, EquipeRepository $equipe): Response
     {
-        return $this->render('', []);
+        return $this->render('dashboard/index.html.twig', [
+            'missions' => $missions->findBy(['statut' => "EN COURS"]),
+            'super_heros' => $superHero->findAll(),
+            'equipes' => $equipe->findAll(),
+        ]);
+    }
+
+    #[Route('/statistiques', name:'app_statistiques')]
+    public function statistiques(): Response
+    {
+        return $this->render('home/statistiques.html.twig', []);
     }
 }
