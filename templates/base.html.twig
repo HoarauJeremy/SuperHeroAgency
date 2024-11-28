@@ -12,12 +12,14 @@
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
-    <body class="h-screen bg-stone-950">
+    <body class="h-screen font-OldNewspaperTypes">
 
         <header class="bg-white">
             <nav class="flex items-center justify-between w-[92%] mx-auto">
                 <div>
-                    <img class="w-16 cursor-pointer" src="https://cdn-icons-png.flaticon.com/512/5968/5968204.png" alt="...">
+                    <a href="{{ path('app_home') }}">
+                        <img class="w-16 cursor-pointer" src="https://cdn-icons-png.flaticon.com/512/5968/5968204.png" alt="...">
+                    </a>
                 </div>
                 <div class="nav-links duration-500 md:static absolute bg-white md:min-h-fit min-h-[60vh] left-0 top-[-100%] md:w-auto w-full flex items-center px-5">
                     <ul class="flex md:flex-row flex-col md:items-center md:gap-[4vw] gap-8">
@@ -43,7 +45,7 @@
         </header>
 
 
-        <main class="flex items-center w-full h-screen">
+        <main class="flex items-center w-full h-full">
         {% block body %}{% endblock %}
         </main>
 

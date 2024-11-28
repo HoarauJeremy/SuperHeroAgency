@@ -5,7 +5,12 @@ module.exports = {
     "./templates/**/*.html.twig",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        OldNewspaperTypes: ['OldNewspaperTypes', "sans-serif"],
+        'Special-Elite': ["Special Elite", 'system-ui'],
+      },
+    },
   },
   plugins: [
     require('@tailwindcss/forms'),
