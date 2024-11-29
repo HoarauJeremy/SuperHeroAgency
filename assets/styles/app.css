@@ -4,11 +4,11 @@
 
 @layer utilities {
     select, select[multiple] {
-        @apply block w-full mt-1 bg-gray-100 border-transparent rounded-md focus:border-gray-500 focus:bg-white focus:ring-0;
+        @apply block w-full mt-1 text-black bg-gray-100 border-transparent rounded-md focus:border-gray-500 focus:bg-white focus:ring-0;
     }
 
     input[type='number'], input[type='text'], input[type='datetime-local'], textarea {
-        @apply block w-full mt-1 bg-gray-100 border-transparent rounded-md focus:border-gray-500 focus:bg-white focus:ring-0;
+        @apply block w-full mt-1 text-black bg-gray-100 border-transparent rounded-md focus:border-gray-500 focus:bg-white focus:ring-0;
     }
 
     input[type="checkbox"] {
@@ -24,7 +24,7 @@
 
 @font-face {
     font-family: 'OldNewspaperTypes';
-    src: url('../../public/fonts/OldNewspaperTypes.ttf') format('ttf');
+    src: url('./../../public/fonts/OldNewspaperTypes.ttf') format('truetype');
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Special+Elite&display=swap');
