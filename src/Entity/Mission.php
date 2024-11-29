@@ -33,11 +33,11 @@ class Mission
     #[ORM\Column(length: 255)]
     private ?string $localisation = null;
 
-    #[ORM\ManyToOne(inversedBy: 'missions')]
-    private ?Equipe $equipeEnCharge = null;
-
     #[ORM\Column]
     private ?int $niveauDanger = null;
+
+    #[ORM\ManyToOne(inversedBy: 'missions')]
+    private ?Equipe $equipe = null;
 
     public function __construct()
     {
@@ -121,18 +121,6 @@ class Mission
         return $this;
     }
 
-    public function getEquipeEnCharge(): ?Equipe
-    {
-        return $this->equipeEnCharge;
-    }
-
-    public function setEquipeEnCharge(?Equipe $equipeEnCharge): static
-    {
-        $this->equipeEnCharge = $equipeEnCharge;
-
-        return $this;
-    }
-
     public function getNiveauDanger(): ?int
     {
         return $this->niveauDanger;
@@ -141,6 +129,18 @@ class Mission
     public function setNiveauDanger(int $niveauDanger): static
     {
         $this->niveauDanger = $niveauDanger;
+
+        return $this;
+    }
+
+    public function getEquipe(): ?Equipe
+    {
+        return $this->equipe;
+    }
+
+    public function setEquipe(?Equipe $equipe): static
+    {
+        $this->equipe = $equipe;
 
         return $this;
     }

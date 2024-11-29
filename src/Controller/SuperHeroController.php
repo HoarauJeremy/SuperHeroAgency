@@ -10,6 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
+use Symfony\UX\Chartjs\Model\Chart;
 
 #[Route('/superheros', name: 'app_super_heros_')]
 final class SuperHeroController extends AbstractController
@@ -67,16 +69,37 @@ final class SuperHeroController extends AbstractController
 
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
-    public function show(SuperHero $superHero, int $id, SuperHeroRepository $superHeroRepository): Response
+    public function show(SuperHero $superHero, int $id, SuperHeroRepository $superHeroRepository, ChartBuilderInterface $chartBuilder): Response
     {
 
-        $data = $superHeroRepository->getMissionsBySuperHero($id);
-        // $data = $superHeroRepository->getStatutMissionParHeros($id);
-
-        dd($data);
-
+        $data = $superHeroRepository->getStatutMissionParHeros($id);
+        
+        if (!empty($data)) {
+            $chart = $chartBuilder->createChart(Chart::TYPE_DOUGHNUT);
+            
+            $chart->setData([
+                'labels' => ['En Attente', 'En Cours', 'Terminée', 'Échouée'],
+                'datasets' => [
+                    [
+                        // 'label' => 'My First dataset',
+                        'backgroundColor' => ['rgba(54, 162, 235, 0.2)', 'rgba(255, 99, 132, 0.2)', 'rgba(54, 235, 162, 0.2)', 'rgba(255, 0, 255, 0.2)'],
+                        'borderColor' => ['rgba(54, 162, 235, 1)', 'rgba(255, 99, 132, 1)', 'rgba(54, 235, 162, 1)', 'rgba(255, 0, 255, 1)'],
+                        'data' => [
+                            isset($data[0]['total']) ? $data[0]['total'] : "",
+                            isset($data[1]['total']) ? $data[1]['total'] : "",
+                            isset($data[2]['total']) ? $data[2]['total'] : "",
+                            isset($data[3]['total']) ? $data[3]['total'] : "",
+                        ],
+                    ],
+                ],
+            ]);
+        } else {
+            $chart = null;
+        }
+        
         return $this->render('super_hero/show.html.twig', [
             'super_hero' => $superHero,
+            'chart' => $chart,
         ]);
     }
 

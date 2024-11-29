@@ -1,45 +1,16 @@
 {% extends 'base.html.twig' %}
+{% import "macro/bouton.twig" as btn %}
 
 {% block title %}New SuperHero{% endblock %}
 
 {% block body %}
-    <div class="w-3/4 p-5 mx-auto bg-white h-3/4">
-        <div class="flex flex-col items-center">
-            <h1>Create new SuperHero</h1>
-
-            {# {{ form_row(form.nom, {
-                'label': "Nom du super héros",
-                    'label_attr': {"class": "text-xl"},
-                'attr': {
-                    "class": "border border-black"
-                },
-            }) }}
-            {{ form_row(form.alterEgo, {
-                'label': "Alter Ego",
-                    'label_attr': {"class": "text-xl"},
-                'attr': {
-                    "class": "border border-black"
-                },
-            }) }}
-            {{ form_row(form.estDisponible, {
-                'label': "Disponible",
-                    'label_attr': {"class": "text-xl"},
-                'attr': {
-                    "class": "border border-black"
-                },
-            }) }}
-            {{ form_row(form.niveauEnergie, {
-                'label': "Niveau d'énergie",
-                    'label_attr': {"class": "text-xl"},
-                'attr': {
-                    "class": "border border-black"
-                },
-            }) }} #}
-            
-            
-            {{ include('super_hero/_form.html.twig') }}
+    <div class="w-auto p-5 mx-auto md:w-3/5 h-3/4">
+        <div class="flex flex-col w-full my-2 md:flex-row md:justify-between">
+            <h1 class="mb-2 text-4xl font-bold">Ajouter un nouveau héros</h1>
+            {{ btn.retour(path('app_super_heros_index')) }}
         </div>
 
-        <a href="{{ path('app_super_heros_index') }}">back to list</a>
+        {{ include('super_hero/_form.html.twig') }}
+
     </div>
 {% endblock %}

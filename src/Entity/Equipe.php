@@ -24,7 +24,7 @@ class Equipe
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\ManyToOne(inversedBy: 'equipes')]
+    #[ORM\ManyToOne(inversedBy: 'equipesGerees')]
     #[ORM\JoinColumn(nullable: false)]
     private ?SuperHero $chef = null;
 
@@ -32,12 +32,12 @@ class Equipe
      * @var Collection<int, SuperHero>
      */
     #[ORM\ManyToMany(targetEntity: SuperHero::class, inversedBy: 'equipes')]
-    private Collection $menbers;
+    private Collection $membres;
 
     /**
      * @var Collection<int, Mission>
      */
-    #[ORM\OneToMany(targetEntity: Mission::class, mappedBy: 'equipeEnCharge')]
+    #[ORM\OneToMany(targetEntity: Mission::class, mappedBy: 'equipe')]
     private Collection $missions;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
@@ -45,7 +45,7 @@ class Equipe
 
     public function __construct()
     {
-        $this->menbers = new ArrayCollection();
+        $this->membres = new ArrayCollection();
         $this->missions = new ArrayCollection();
     }
 
@@ -105,23 +105,23 @@ class Equipe
     /**
      * @return Collection<int, SuperHero>
      */
-    public function getMenbers(): Collection
+    public function getMembres(): Collection
     {
-        return $this->menbers;
+        return $this->membres;
     }
 
-    public function addMenber(SuperHero $menber): static
+    public function addMembre(SuperHero $membre): static
     {
-        if (!$this->menbers->contains($menber)) {
-            $this->menbers->add($menber);
+        if (!$this->membres->contains($membre)) {
+            $this->membres->add($membre);
         }
 
         return $this;
     }
 
-    public function removeMenber(SuperHero $menber): static
+    public function removeMembre(SuperHero $membre): static
     {
-        $this->menbers->removeElement($menber);
+        $this->membres->removeElement($membre);
 
         return $this;
     }
@@ -138,7 +138,7 @@ class Equipe
     {
         if (!$this->missions->contains($mission)) {
             $this->missions->add($mission);
-            $mission->setEquipeEnCharge($this);
+            $mission->setEquipe($this);
         }
 
         return $this;
@@ -148,8 +148,8 @@ class Equipe
     {
         if ($this->missions->removeElement($mission)) {
             // set the owning side to null (unless already changed)
-            if ($mission->getEquipeEnCharge() === $this) {
-                $mission->setEquipeEnCharge(null);
+            if ($mission->getEquipe() === $this) {
+                $mission->setEquipe(null);
             }
         }
 

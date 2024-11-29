@@ -1,50 +1,50 @@
 {% extends 'base.html.twig' %}
+{% import "macro/bouton.twig" as btn %}
 
 {% block title %}Mission{% endblock %}
 
 {% block body %}
-    <h1>Mission</h1>
+    <div class="w-auto p-5 mx-auto md:w-3/5 h-3/4">
+        <div class="flex flex-col w-full my-2 md:flex-row md:justify-between">
+            <h1 class="mb-2 text-4xl font-bold">Mission</h1>
+            {{ btn.retour(path('app_mission_index')) }}
+        </div>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ mission.id }}</td>
-            </tr>
-            <tr>
-                <th>Titre</th>
-                <td>{{ mission.titre }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ mission.description }}</td>
-            </tr>
-            <tr>
-                <th>Statut</th>
-                <td>{{ mission.statut.value }}</td>
-            </tr>
-            <tr>
-                <th>Debut</th>
-                <td>{{ mission.debut ? mission.debut|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Fin</th>
-                <td>{{ mission.fin ? mission.fin|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Localisation</th>
-                <td>{{ mission.localisation }}</td>
-            </tr>
-            <tr>
-                <th>NiveauDanger</th>
-                <td>{{ mission.niveauDanger }}</td>
-            </tr>
-        </tbody>
-    </table>
+        <div class="flex flex-col items-center p-2 md:w-3/4">
+            <div class="w-full my-1 text-lg">
+                <h2 class="underline">Titre :</h2>
+                <p class="ml-4">{{ mission.titre|capitalize }}</p>
+            </div>
+            <div class="w-full my-1 text-lg">
+                <h2 class="underline">Description :</h2>
+                <p class="ml-4">{{ mission.description }}</p>
+            </div>
+            <div class="w-full my-1 text-lg">
+                <h2 class="underline">Statut :</h2>
+                <p class="ml-4">{{ mission.statut.value|capitalize }}</p>
+            </div>
+            <div class="w-full my-1 text-lg">
+                <h2 class="underline">Debut :</h2>
+                <p class="ml-4">{{ mission.debut ? mission.debut|date('d/m/Y H:i') : '' }}</p>
+            </div>
+            <div class="w-full my-1 text-lg">
+                <h2 class="underline">Fin :</h2>
+                <p class="ml-4">{{ mission.fin ? mission.fin|date('d/m/Y H:i') : '' }}</p>
+            </div>
+            <div class="w-full my-1 text-lg">
+                <h2 class="underline">Localisation :</h2>
+                <p class="ml-4">{{ mission.localisation }}</p>
+            </div>
+            <div class="w-full my-1 text-lg">
+                <h2 class="underline">Niveau de danger :</h2>
+                <p class="ml-4">{{ mission.niveauDanger }}</p>
+            </div>
+        </div>
+        
+        {{ btn.modifier(path('app_mission_edit', {'id': mission.id})) }}
 
-    <a href="{{ path('app_mission_index') }}">back to list</a>
+        {{ include('mission/_delete_form.html.twig') }}
 
-    <a href="{{ path('app_mission_edit', {'id': mission.id}) }}">edit</a>
-
-    {{ include('mission/_delete_form.html.twig') }}
+    </div>
+    
 {% endblock %}

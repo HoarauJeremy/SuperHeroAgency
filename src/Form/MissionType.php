@@ -55,7 +55,7 @@ class MissionType extends AbstractType
                     ]),
                 ]
             ])
-            ->add('equipeEnCharge', EntityType::class, [
+            ->add('equipe', EntityType::class, [
                 'class' => Equipe::class,
                 'choice_label' => 'nom',
             ])

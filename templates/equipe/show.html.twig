@@ -1,73 +1,76 @@
 {% extends 'base.html.twig' %}
+{% import "macro/bouton.twig" as btn %}
 
 {% block title %}Equipe{% endblock %}
 
 {% block body %}
-    <div class="flex flex-col w-full">
-        <h1>Equipe</h1>
-        <table class="table">
-            <tbody>
-                <tr>
-                    <th>Id</th>
-                    <td>{{ equipe.id }}</td>
-                </tr>
-                <tr>
-                    <th>Nom</th>
-                    <td>{{ equipe.nom }}</td>
-                </tr>
-                <tr>
-                    <th>EstActif</th>
-                    <td>{{ equipe.estActif ? 'Yes' : 'No' }}</td>
-                </tr>
-                <tr>
-                    <th>Chef d'equipe</th>
-                    <td>{{ equipe.chef.nom|capitalize }}</td>
-                </tr>
-                <tr>
-                    <th>Menbre de l'équipe</th>
-                    <td>
-                        <ul>
-                        {% for menbre in equipe.menbers %}
-                            <li>{{ menbre.nom }}</li>
-                        {% endfor %}
-                        </ul>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <hr class="w-10/12 border">
+    <div class="w-auto p-5 mx-auto md:w-3/5 h-3/4">
         
-        <table>
-            <caption class="table-caption">Historique des missions</caption>
-            <thead>
-                <tr>
-                    <th>Titre</th>
-                    <th>Statut</th>
-                    <th>Debut</th>
-                    <th>Fin</th>
-                    <th>Localisation</th>
-                    <th>Niveau de danger</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for mission in equipe.missions %}
-                <tr class="border">
-                    <td>{{ mission.titre }}</td>
-                    <td>{{ mission.statut.value|capitalize }}</td>
-                    <td>{{ mission.debut ? mission.debut|date('d/m/Y H:i') : '' }}</td>
-                    <td>{{ mission.fin ? mission.fin|date('d/m/Y H:i') : '' }}</td>
-                    <td>{{ mission.localisation }}</td>
-                    <td>{{ mission.niveauDanger }}</td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="9">Aucune missions disponible</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        <a href="{{ path('app_equipe_index') }}">back to list</a>
-        <a href="{{ path('app_equipe_edit', {'id': equipe.id}) }}">edit</a>
+        <div class="flex flex-col w-full my-2 md:flex-row md:justify-between">
+            <h1 class="mb-2 text-4xl font-bold">Équipe {{ equipe.nom }}</h1>
+            {{ btn.retour(path('app_equipe_index')) }}
+        </div>
+
+
+        <div class="flex flex-col items-center p-2 md:w-3/4">
+            <div class="w-full my-1 text-lg">
+                <h2 class="underline">Nom :</h2>
+                <td>{{ equipe.nom }}</td>
+            </div>
+            <div class="w-full my-1 text-lg">
+                <h2 class="underline">Actif :</h2>
+                <td>{{ equipe.estActif ? 'Oui' : 'Non' }}</td>
+            </div>
+            <div class="w-full my-1 text-lg">
+                <h2 class="underline">Chef d'equipe :</h2>
+                <td>{{ equipe.chef.nom|capitalize }}</td>
+            </div>
+            <div class="w-full my-1 text-lg">
+                <h2 class="underline">Membre de l'équipe</h2>
+                <div class="ml-4">
+                    <ul>
+                    {% for membre in equipe.membres %}
+                        <li><a href="{{ path('app_super_heros_show', {'id': membre.id}) }}">{{ membre.nom }}</a></li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        
+            <hr class="w-10/12 mx-auto my-2 border">
+            
+            <table class="border">
+                <caption class="table-caption">Historique des missions</caption>
+                <thead>
+                    <tr>
+                        <th>Titre</th>
+                        <th>Statut</th>
+                        <th>Debut</th>
+                        <th>Fin</th>
+                        <th>Localisation</th>
+                        <th>Niveau de danger</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for mission in equipe.missions %}
+                    <tr class="border">
+                        <td>{{ mission.titre }}</td>
+                        <td>{{ mission.statut.value|capitalize }}</td>
+                        <td>{{ mission.debut ? mission.debut|date('d/m/Y H:i') : '' }}</td>
+                        <td>{{ mission.fin ? mission.fin|date('d/m/Y H:i') : '' }}</td>
+                        <td>{{ mission.localisation }}</td>
+                        <td>{{ mission.niveauDanger }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="9">Aucune missions disponible</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {{ btn.modifier(path('app_equipe_edit', {'id': equipe.id})) }}
+        
         {{ include('equipe/_delete_form.html.twig') }}
         
     </div>

@@ -41,7 +41,7 @@ class MissionRepository extends ServiceEntityRepository
             ->select('
                 COUNT(m.id) AS totalMissions, 
                 SUM(CASE WHEN m.statut = :statut THEN 1 ELSE 0 END) AS missionsReussies')
-            ->where('m.equipeEnCharge = :idEquipe')
+            ->where('m.equipe = :idEquipe')
             ->setParameter('idEquipe', $idEquipe)
             ->setParameter('statut', 'TERMINER');
 

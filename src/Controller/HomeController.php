@@ -6,6 +6,7 @@ use App\Repository\EquipeRepository;
 use App\Repository\MissionRepository;
 use App\Repository\SuperHeroRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
@@ -13,13 +14,13 @@ use Symfony\UX\Chartjs\Model\Chart;
 
 class HomeController extends AbstractController
 {
-    #[Route('/', name: 'app_home')]
-    public function index(): Response
-    {
-        return $this->render('home/index.html.twig', []);
-    }
+    // #[Route('/', name: 'app_home')]
+    // public function index(): Response
+    // {
+    //     return $this->render('home/index.html.twig', []);
+    // }
 
-    #[Route('/dashboard', name:'app_dashboard')]
+    #[Route('/', name:'app_dashboard')]
     public function dashboards(MissionRepository $missions, SuperHeroRepository $superHero, EquipeRepository $equipe): Response
     {
         return $this->render('home/dashboard.html.twig', [
@@ -29,28 +30,19 @@ class HomeController extends AbstractController
         ]);
     }
 
-    #[Route('/statistiques/{id}', name:'app_statistiques')]
-    public function statistiques(MissionRepository $missionRepository, EquipeRepository $equipeRepository, ChartBuilderInterface $chartBuilder, int $id): Response
+    #[Route('/statistiques', name:'app_statistiques')]
+    public function statistiques(MissionRepository $missionRepository, EquipeRepository $equipeRepository, ChartBuilderInterface $chartBuilder, Request $request): Response
     {
-        $equipe = $equipeRepository->find($id);
+        $id = $request->query->get('equipe');
 
-        if (!$equipe) {
-            throw $this->createNotFoundException('Équipe introuvable');
+        if ($id != null) {
+            $data = $missionRepository->getTauxReussiteEquipe($id);
         }
 
-        $data = $missionRepository->getTauxReussiteEquipe($id);
-        
-        // dd($data);
-
-        if (!$data || $data[0]['totalMissions'] == 0) {
-            return $this->render('statistiques/equipe.html.twig', [
-                'equipe' => $equipe,
-                'message' => 'Aucune mission trouvée pour cette équipe.',
-            ]);
-        }
-
-        $chart = $chartBuilder->createChart(Chart::TYPE_DOUGHNUT);
-
+        if (!empty($data)) {
+            
+            $chart = $chartBuilder->createChart(Chart::TYPE_PIE);
+            
             $chart->setData([
                 'labels' => ['Missions Réussies', 'Missions Non Réussies'],
                 'datasets' => [
@@ -66,8 +58,22 @@ class HomeController extends AbstractController
                 ],
             ]);
 
+            $chart->setOptions([
+                'responsive' => true,
+                'resize' => [
+                    "width" => '250',
+                    "height" => '250',
+                ],
+                "padding" => 20
+            ]);
+
+        } else {
+            $chart = null;
+        }
+            
         return $this->render('home/statistiques.html.twig', [
             'chart' => $chart,
+            'equipes' => $equipeRepository->findAll(),
         ]);
     }
 }
