@@ -26,10 +26,6 @@ class EquipeType extends AbstractType
                 'choice_label' => 'nom',
                 'multiple' => true,
             ])
-            // ->add('missionEnCours', EntityType::class, [
-            //     'class' => Mission::class,
-            //     'choice_label' => 'id',
-            // ])
         ;
     }
 
