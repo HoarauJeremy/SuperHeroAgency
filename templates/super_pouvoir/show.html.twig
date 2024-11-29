@@ -1,31 +1,32 @@
 {% extends 'base.html.twig' %}
+{% import "macro/bouton.twig" as btn %}
 
 {% block title %}{{ super_pouvoir.nom|capitalize }}{% endblock %}
 
 {% block body %}
-    <h1>SuperPouvoir</h1>
+    
+    <div class="w-auto p-5 mx-auto md:w-3/5 h-3/4">
+        <div class="flex flex-col w-full my-2 md:flex-row md:justify-between">
+            <h1 class="mb-2 text-4xl font-bold">Super Pouvoir</h1>
+            {{ btn.retour(path('app_super_pouvoir_index')) }}
+        </div>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ super_pouvoir.id }}</td>
-            </tr>
-            <tr>
-                <th>Nom</th>
-                <td>{{ super_pouvoir.nom }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ super_pouvoir.description }}</td>
-            </tr>
-            <tr>
-                <th>Niveau</th>
-                <td>{{ super_pouvoir.niveau }}</td>
-            </tr>
-            <tr>
-                <th>Héros</th>
-                <td>
+        <div class="flex flex-col items-center p-2 md:w-3/4">
+            <div class="w-full my-1 text-lg">
+                <h2 class="underline">Nom :</h2>
+                <p class="ml-4">{{ super_pouvoir.nom }}</p>
+            </div>
+            <div class="w-full my-1 text-lg">
+                <h2 class="underline">Description :</h2>
+                <p class="ml-4">{{ super_pouvoir.description }}</p>
+            </div>
+            <div class="w-full my-1 text-lg">
+                <h2 class="underline">Niveau :</h2>
+                <p class="ml-4">{{ super_pouvoir.niveau }}</p>
+            </div>
+            <div class="w-full my-1 text-lg">
+                <h2 class="underline">Héros :</h2>
+                <div class="ml-4">
                     <ul>
                         {% for heros in super_pouvoir.superHeroes %}
                             <li><a href="{{ path('app_super_heros_show', {'id': heros.id}) }}">{{ heros.nom|capitalize }}</a></li>
@@ -33,14 +34,14 @@
                             <li>Aucun héros n'est liée à ce pouvoir</li>
                         {% endfor %}
                     </ul>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+                </div>
+            </div>
+        </div>
 
-    <a href="{{ path('app_super_pouvoir_index') }}">back to list</a>
-
-    <a href="{{ path('app_super_pouvoir_edit', {'id': super_pouvoir.id}) }}">edit</a>
-
-    {{ include('super_pouvoir/_delete_form.html.twig') }}
+        {{ btn.modifier(path('app_super_pouvoir_edit', {'id': super_pouvoir.id})) }}
+    
+        {{ include('super_pouvoir/_delete_form.html.twig') }}
+    
+    </div>
+    
 {% endblock %}
