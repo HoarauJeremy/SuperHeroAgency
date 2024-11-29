@@ -1,11 +1,16 @@
 {% extends 'base.html.twig' %}
-
+{% import "macro/bouton.twig" as btn %}
 {% block title %}New Equipe{% endblock %}
 
 {% block body %}
-    <h1>Create new Equipe</h1>
+    <div class="w-auto p-5 mx-auto md:w-3/5 h-3/4">
+        <div class="flex flex-col w-full my-2 md:flex-row md:justify-between">
+            <h1 class="mb-2 text-4xl font-bold">Créer une nouvelle équipe</h1>
+            {{ btn.retour(path('app_equipe_index')) }}
+        </div>
 
-    {{ include('equipe/_form.html.twig') }}
+        {{ include('equipe/_form.html.twig') }}
 
-    <a href="{{ path('app_equipe_index') }}">back to list</a>
+    </div>
+
 {% endblock %}
