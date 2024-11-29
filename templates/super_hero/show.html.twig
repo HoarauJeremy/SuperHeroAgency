@@ -1,111 +1,110 @@
 {% extends 'base.html.twig' %}
+{% import "macro/bouton.twig" as btn %}
 
 {% block title %}{{ super_hero.nom|capitalize }}{% endblock %}
 
 {% block body %}
-    <div class="w-3/4 h-full p-5 mx-auto bg-white">
-        <div class="flex flex-col items-center justify-between">
-    
-            <h1 class="text-4xl font-semibold">{{ super_hero.nom|capitalize }}</h1>
+    <div class="w-auto p-5 mx-auto md:w-3/5 h-3/4">
+        <div class="flex flex-col w-full my-2 md:flex-row md:justify-between">
+            <h1 class="mb-2 text-4xl font-bold">{{ super_hero.nom|capitalize }}</h1>
+            {{ btn.retour(path('app_super_heros_index')) }}
+        </div>
 
-            <div class="flex justify-between w-full mb-1">
-                <a
-                    class="px-2 py-1 text-white border rounded shadow-md bg-sky-800 hover:bg-sky-700"
-                    href="{{ path('app_super_heros_index') }}">Retourner à la liste</a>
-                <div class="flex justify-between">
-                    <a
-                        class="px-2 py-1 text-white bg-orange-600 border rounded shadow-md hover:bg-orange-500"
-                        href="{{ path('app_super_heros_edit', {'id': super_hero.id}) }}">edit</a>
-                    {{ include('super_hero/_delete_form.html.twig') }}
-                </div>
+        <div class="flex flex-col items-center w-full md:flex-row ">
+            <div class="w-full px-2 py-1 border md:w-1/3 min-h-52">
+                {% if super_hero.nomImage is not null  %}
+                    <img class="w-full h-full" src="{{ vich_uploader_asset(super_hero) }}" alt="{{ super_hero.nomImage }}">
+                {% else %}
+                    Aucune image disponible
+                {% endif %}
+            
             </div>
-
-            <div class="flex items-center w-full bg-fuchsia-500">
-                <div class="w-1/3 px-2 py-1 border min-h-52">
-                    {% if super_hero.nomImage is not null  %}
-                        <img class="w-full h-full" src="{{ vich_uploader_asset(super_hero) }}" alt="{{ super_hero.nomImage }}">
-                    {% else %}
-                        Aucune image disponible
-                    {% endif %}
                 
+            <div class="w-full min-h-full px-3 md:w-2/3">
+                <div class="w-full my-1 text-lg">
+                    <h3 class="mr-2 underline ">Nom :</h3>
+                    <p class="text-lg">{{ super_hero.nom|capitalize }}</p>
                 </div>
-                <div class="w-2/3 min-h-full px-3">
-                    <div class="flex items-center p-2 my-3 ">
-                        <h3 class="mr-2 text-xl font-medium underline ">Nom :</h3>
-                        <p class="text-lg">{{ super_hero.nom|capitalize }}</p>
+                <div class="w-full my-1 text-lg">
+                    <h3 class="mr-2 underline ">Alter ego :</h3>
+                    <p class="text-lg">{{ super_hero.alterEgo|capitalize }}</p>
+                </div>
+                <div class="w-full my-1 text-lg">
+                    <h3 class="mr-2 underline ">Disponible :</h3>
+                    <p class="text-lg">{{ super_hero.estDisponible ? 'Oui' : 'Non' }}</p>
+                </div>
+                <div class="w-full my-1 text-lg">
+                    <h3 class="mr-2 underline ">Niveau d'énergie :</h3>
+                    <p class="text-lg">{{ super_hero.niveauEnergie }}</p>
+                </div>
+                
+                <div class="flex flex-col p-2 my-3 ">
+                    <h3 class="underline ">Biographie :</h3>
+                    <div class="p-1 my-1 border rounded min-h-28">
+                        <p class="text-lg">{{ super_hero.biographie ? super_hero.biographie : "biographie non disponible" }}</p>
                     </div>
-                    <div class="flex items-center p-2 my-3 ">
-                        <h3 class="mr-2 text-xl font-medium underline ">Alter ego :</h3>
-                        <p class="text-lg">{{ super_hero.alterEgo|capitalize }}</p>
-                    </div>
-                    <div class="flex items-center p-2 my-3 ">
-                        <h3 class="mr-2 text-xl font-medium underline ">Disponible :</h3>
-                        <p class="text-lg">{{ super_hero.estDisponible ? 'Oui' : 'Non' }}</p>
-                    </div>
-                    <div class="flex items-center p-2 my-3 ">
-                        <h3 class="mr-2 text-xl font-medium underline ">Niveau d'énergie :</h3>
-                        <p class="text-lg">{{ super_hero.niveauEnergie }}</p>
-                    </div>
-                    <div class="flex flex-col p-2 my-3 ">
-                        <h3 class="text-xl font-medium underline ">Biographie :</h3>
-                        <div class="p-1 my-1 border rounded min-h-28">
-                            <p class="text-lg">{{ super_hero.biographie ? super_hero.biographie : "biographie non disponible" }}</p>
-                        </div>
-                    </div>
-                    <div class="flex flex-col p-2 my-3 ">
-                        <h3 class="text-xl font-medium underline ">Pouvoirs :</h3>
-                        <div class="p-1 my-1 border rounded min-h-28">
-                            <ul>
-                                {% for pouvoirs in super_hero.Pouvoir %}
-                                    <li>
-                                        <span class="font-medium">- {{ pouvoirs.nom|capitalize }}</span>
-                                        <ol class="ml-2">
-                                            <li>{{ pouvoirs.description }}</li>
-                                        </ol>
-                                    </li>
-                                {% else %}
-                                    Aucun pouvoirs.
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </div>
-                    {# --EQUIPE-- #}
-                    <div class="flex flex-col p-2 my-3 ">
-                        <h3 class="text-xl font-medium underline">Équipe :</h3>
-                        <div class="text-lg font-semibold">
-                        {% for equipes in super_hero.equipes %}
-                            <span class="underline"><a href="{{ path('app_equipe_show', {'id': equipes.id}) }}">{{ equipes.nom|capitalize }}</a></span>
-                            
-                            {% for mission in equipes.missions %}
-                                <div class="ml-2">
-                                    <h4 class="text-xl font-medium">{{ mission.titre }}</h4>
-                                    <div class="ml-2 text-base">
-                                        <p>Description : {{ mission.description }}</p>
-                                        <p>Localisation : {{ mission.localisation }}</p>
-                                        <p>Statut : {{ mission.statut.value|capitalize }}</p>
-                                        <p>Niveau de danger : {{ mission.niveauDanger }}</p>
-                                        <p>Debut : {{ mission.debut|date("d/m/Y H:i") }}</p>
-                                        <p>Fin : {{ mission.fin|date("d/m/Y H:i") }}</p>
-                                    </div>
-                                </div>
-                            {% else %}                                
-                                <div class="ml-2">Aucune missions disponible</div>
+                </div>
+                    
+                <div class="flex flex-col p-2 my-3 ">
+                    <h3 class="underline ">Pouvoirs :</h3>
+                    <div class="p-1 my-1 border rounded min-h-28">
+                        <ul>
+                            {% for pouvoirs in super_hero.Pouvoir %}
+                                <li>
+                                    <span class="font-medium">- {{ pouvoirs.nom|capitalize }}</span>
+                                </li>
+                            {% else %}
+                                Aucun pouvoirs.
                             {% endfor %}
-                            
-                        {% else %}
-                            <p>Liée à aucune equipe</p>
-                        {% endfor %}                            
-                        </div>
+                        </ul>
                     </div>
-                    {# ---------- #}
                 </div>
+                    
+                {# --EQUIPE-- #}
+                <div class="flex flex-col p-2 my-3 ">
+                    <h3 class="underline ">Équipe :</h3>
+                    <div class="">
+                    {% for equipes in super_hero.equipes %}
+                        <span class="underline"><a href="{{ path('app_equipe_show', {'id': equipes.id}) }}">{{ equipes.nom|capitalize }}</a></span>
+                        
+                        {% for mission in equipes.missions %}
+                            <div class="ml-2">
+                                <h4 class="">{{ mission.titre }}</h4>
+                                <div class="ml-2">
+                                    <p>Description : {{ mission.description }}</p>
+                                    <p>Localisation : {{ mission.localisation }}</p>
+                                    <p>Statut : {{ mission.statut.value|capitalize }}</p>
+                                    <p>Niveau de danger : {{ mission.niveauDanger }}</p>
+                                    <p>Debut : {{ mission.debut|date("d/m/Y H:i") }}</p>
+                                    <p>Fin : {{ mission.fin|date("d/m/Y H:i") }}</p>
+                                </div>
+                            </div>
+                        {% else %}                                
+                            <div class="ml-2">Aucune missions disponible</div>
+                        {% endfor %}
+                        
+                    {% else %}
+                        <p>Liée à aucune equipe</p>
+                    {% endfor %}                            
+                    </div>
+                </div>
+                    {# ---------- #}
             </div>
+        </div>
 
-            <div class="bg-red-100">
-                
-                    <div>mission échouée</div>
-            </div>
+        <hr class="w-11/12 mx-auto my-3 border">
+
+        <div class="my-3">
+            
+            {% if chart is not null %}
+                {{ render_chart(chart) }}
+            {% endif %}
+            
             
         </div>
+            
+        {{ btn.modifier(path('app_super_heros_edit', {'id': super_hero.id})) }}
+    
+        {{ include('super_hero/_delete_form.html.twig') }}
     </div>
 {% endblock %}

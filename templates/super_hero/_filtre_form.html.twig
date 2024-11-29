@@ -16,5 +16,8 @@
     <label for="niveauEnergie">Niveau d'énergie minimum</label>
     <input type="number" name="niveauEnergie" id="niveauEnergie" value="{{ app.request.query.get('niveauEnergie') }}">
 
-    <button type="submit">Filtrer</button>
+    <button
+        class="w-full px-4 py-3 mt-2 font-medium text-white rounded-md shadow-lg bg-slate-400" 
+        type="submit">Filtrer</button>
+    
 </form>
