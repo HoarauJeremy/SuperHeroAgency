@@ -50,5 +50,5 @@ class MissionRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-
+    
 }
