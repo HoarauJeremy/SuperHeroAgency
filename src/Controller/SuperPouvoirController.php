@@ -37,6 +37,7 @@ final class SuperPouvoirController extends AbstractController
             $entityManager->persist($superPouvoir);
             $entityManager->flush();
 
+            $this->addFlash('success','Le super pouvoir à été créer');
             return $this->redirectToRoute('app_super_pouvoir_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -63,6 +64,7 @@ final class SuperPouvoirController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
+            $this->addFlash('success','Le super pouvoir à été modifier');
             return $this->redirectToRoute('app_super_pouvoir_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -79,7 +81,8 @@ final class SuperPouvoirController extends AbstractController
             $entityManager->remove($superPouvoir);
             $entityManager->flush();
         }
-
+        
+        $this->addFlash('success','Le super pouvoir à été supprimer');
         return $this->redirectToRoute('app_super_pouvoir_index', [], Response::HTTP_SEE_OTHER);
     }
 }
